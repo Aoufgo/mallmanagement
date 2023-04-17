@@ -5,9 +5,47 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.aouf.mallmanagement.mapper.CategoryMapper">
+    <resultMap id="CategoryMap" type="Category">
+        <id property="cate_id" column="cate_id" />
+        <result property="cate_name" column="cate_name"/>
+        <result property="cate_sort" column="cate_sort"/>
+        <result property="createtime" column="createtime"/>
+        <result property="updatetime" column="updatetime"/>
+        <result property="cate_parentid" column="cate_parentid"/>
+        <result property="cate_parentname" column="cate_parentname"/>
+        <collection property="brands" ofType="Brand">
+            <id property="brand_id" column="brand_id"/>
+            <result property="brand_name" column="brand_name"/>
+        </collection>
+        <collection property="spuAttrKeys" ofType="SpuAttrKey">
+            <id property="key_id" column="key_id"/>
+            <result property="key_name" column="key_name"/>
+        </collection>
+    </resultMap>
     <select id="getOne" resultType="Category">
         select cate_id ,cate_name ,cate_sort ,createtime ,updatetime ,cate_parentid
         from category c
         where cate_id =#{cate_id}
+    </select>
+    <select id="getCategoriesByBo" resultMap="CategoryMap">
+        select c.cate_id,c.cate_name,c.cate_sort,c.createtime,c.updatetime,c.cate_parentid,c2.cate_name as cate_parentname,b.brand_id,b.brand_name,s.key_id,s.key_name
+        from category c
+        left join brand_categories bc on c.cate_id = bc.category_id left join brand b on bc.brand_id = b.brand_id
+        left join spu_attr_key_categories sc on c.cate_id = sc.category_id left join spu_attr_key s on sc.spu_attr_key_id = s.key_id
+        left join category c2 on c.cate_parentid = c2.cate_id
+        <where>
+            <if test="cate_id !=null">
+                c.cate_id = #{cate_id}
+            </if>
+            <if test="cate_name != null and cate_name.length != 0">
+                and c.cate_name like "%"#{cate_name}"%"
+            </if>
+            <if test="cate_parentid !=null">
+                c.cate_parentid = #{cate_parentid}
+            </if>
+        </where>
+    </select>
+    <select id="getAllParentCategories" resultType="category">
+        select cate_id,cate_name from category where cate_parentid is null
     </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.aouf.mallmanagement.bean.po;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 //实体模型类-和数据库中的category表一一对应
 public class Category {
@@ -11,8 +12,34 @@ public class Category {
     private Timestamp createtime;   //创建时间（数据库中是timestamp类型）
     private Timestamp updatetime;   //修改时间
     private Integer cate_parentid;  //父级分类id
+    private String cate_parentname;
+    private List<Brand> brands;
+    private List<SpuAttrKey> spuAttrKeys;
 
-    //访问器
+    public String getCate_parentname() {
+        return cate_parentname;
+    }
+
+    public void setCate_parentname(String cate_parentname) {
+        this.cate_parentname = cate_parentname;
+    }
+
+    public List<Brand> getBrands() {
+        return brands;
+    }
+
+    public void setBrands(List<Brand> brands) {
+        this.brands = brands;
+    }
+
+    public List<SpuAttrKey> getSpuAttrKeys() {
+        return spuAttrKeys;
+    }
+
+    public void setSpuAttrKeys(List<SpuAttrKey> spuAttrKeys) {
+        this.spuAttrKeys = spuAttrKeys;
+    }
+//访问器
 
     public Integer getCate_id() {
         return cate_id;

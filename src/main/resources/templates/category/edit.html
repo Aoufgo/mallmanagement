@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>修改分类</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <link th:href="@{/css/bootstrap-4.6.1.min.css}" rel="stylesheet"/>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <form action="#" method="POST">
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">分类编号：</div>
+            </div>
+            <input type="text" class="form-control" placeholder="请输入分类名称" readonly
+                />
+        </div>
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">分类名称：</div>
+            </div>
+            <input type="text" class="form-control" placeholder="请输入分类名称"
+                   />
+        </div>
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">分类排序：</div>
+            </div>
+            <input type="text" class="form-control" placeholder="请输入分类排序"
+                   />
+        </div>
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">父级分类：</div>
+            </div>
+            <select class="form-control">
+                <option value="">顶级分类</option>
+                <option value="父级分类id">父级分类名字</option>
+            </select>
+        </div>
+
+        <div class="input-group my-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">商品品牌：</div>
+            </div>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-success btn-brand-add"> + </button>
+            </div>
+        </div>
+        <div class="my-2 row brand-group">
+            <div class="col-3 brand my-2" >
+                <div class="input-group">
+                    <select class="form-control brand-control">
+                        <option >品牌名称</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-danger btn-brand-dis"> - </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary"> 保存设置 </button>
+    </form>
+</div>
+
+<script>
+$(document).ready(()=>{
+
+    // 重排 品牌 name
+    function reloadBrandName(){
+        $(".brand-control").each(function(index,dom){
+            $(this).prop("name","brandList["+index+"].brand_id")
+        })
+    }
+
+    // todo,添加品牌
+
+    // todo,删除品牌
+
+
+})
+
+
+</script>
+
+</body>
+</html>
