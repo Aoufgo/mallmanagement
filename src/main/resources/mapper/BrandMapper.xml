@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aouf.mallmanagement.mapper.BrandMapper">
+    <select id="getOne" resultType="Brand">
+        select * from brand b
+        where brand_id = #{brand_id}
+    </select>
+
+    <select id="getBrandsByBo" resultType="Brand">
+        <bind name="index" value="(page-1) * pageSize"/>
+        select * from brand b
+        <where>
+            <if test="brand_id != null and brand_id.length != 0">
+               and brand_id = #{brand_id}
+            </if>
+            <if test="brand_name != null and brand_name.length != 0">
+                and brand_name like "%"#{brand_name}"%"
+            </if>
+        </where>
+        limit #{index},#{pageSize}
+    </select>
+
+    <select id="getBrandsByBoCount" resultType="int">
+        select count(1) from (
+        select * from brand b
+        <where>
+            <if test="brand_id != null and brand_id.length != 0">
+                and brand_id = #{brand_id}
+            </if>
+            <if test="brand_name != null and brand_name.length != 0">
+                and brand_name like "%"#{brand_name}"%"
+            </if>
+        </where>
+        ) t
+    </select>
+    <insert id="add">
+        INSERT INTO brand
+        (brand_id, brand_name, brand_introduction, brand_logourl, sortno, createtime, updatetime)
+        VALUES(#{addBrandBo.brand_id},
+            #{addBrandBo.brand_name},
+            #{addBrandBo.brand_introduction},
+            #{addBrandBo.brand_logourl},
+            #{addBrandBo.sortno},
+            #{addBrandBo.createtime},
+            #{addBrandBo.updatetime});
+
+    </insert>
+</mapper>

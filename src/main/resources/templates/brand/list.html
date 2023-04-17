@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+<!--    当用户访问到/brand/list的时候，要定位到当前的视图文件-->
+    <title>品牌管理页面</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <link th:href="@{/css/bootstrap-4.6.1.min.css}" rel="stylesheet"/>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+
+    <div class="container">
+        <div class="alert alert-primary my-2"> 商品品牌管理 </div>
+    </div>
+
+    <div class="container-fluid">
+        <!--  筛选条件  -->
+        <form action="list" method="POST" name="form1">
+            <div class="row mb-3">
+                <div class="col-4">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">商品编号：</div>
+                        </div>
+                        <input type="text" class="form-control" name="brand_id" placeholder="请输入商品编号"
+                      />
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">商品名称：</div>
+                        </div>
+                        <input type="text" class="form-control" name="brand_name" placeholder="请输入商品名称"
+                               />
+                    </div>
+                </div>
+                <div class="col-2">
+                    <input type="hidden" name="pageSize" th:value="${pageSize}" />
+                    <input type="hidden" name="page" th:value="${page}" />
+                    <input type="hidden" id="pageCount" th:value="${pageCount}" />
+                    <button type="submit" class="btn btn-primary search"> 开始搜索 </button>
+                </div>
+                <div class="col-2">
+                    <a href="add" class="btn btn-success"> 添加品牌 </a>
+                </div>
+            </div>
+        </form>
+        <!--  /筛选条件  -->
+    </div>
+
+    <!--  满足条件的品牌数据  -->
+    <div class="container-fluid">
+        <table class="table table-bordered table-striped table-sm">
+            <thead>
+                <tr>
+                    <th>    <input type="checkbox"/>    </th>
+                    <th > 品牌编号 </th>
+                    <th> 品牌名称 </th>
+                    <th> 品牌图片 </th>
+                    <th> 排序序号 </th>
+                    <th> 创建时间 </th>
+                    <th> 更新时间 </th>
+                    <th> 操作选项 </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="brand:${list}">
+                    <td>    <input type="checkbox"/>    </td>
+                    <td th:text="${brand.brand_id}"> 品牌编号 </td>
+                    <td th:text="${brand.brand_name}"> 品牌名称 </td>
+                    <td>
+                        <img height="40px" th:src="@{/img/}+${brand.brand_logourl}"/>
+                    </td>
+                    <td th:text="${brand.sortno}"> 排序序号 </td>
+                    <td th:text="${brand.createtime}"> 创建时间 </td>
+                    <td th:text="${brand.updatetime}"> 更新时间 </td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-secondary"> 查看 </button>
+                            <button type="button" class="btn btn-success"> 编辑 </button>
+                            <a href="#" class="btn btn-danger brand-delete"> 删除 </a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!--  /满足条件的品牌数据  -->
+
+    <!--  分页控件  -->
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-6">
+                <div class="btn-group">
+                    <button  th:disabled="${page} == 1" class="btn btn-primary page-first"
+                            >首页</button>
+                    <button th:disabled="${page} == 1" class="btn btn-primary page-prev"
+                            >上一页</button>
+
+                    <button th:disabled="${page} == ${pageCount}" class="btn btn-primary page-next"
+                            >下一页</button>
+                    <button th:disabled="${page} == ${pageCount}" class="btn btn-primary page-last"
+                            >末页</button>
+
+                </div>
+                    <button class="btn btn-light page-dote" style="display:none;">...</button>
+                    <button class="btn btn-light page-num" style="display:none;">1</button>
+            </div>
+            <div class="col-3">
+                <div class="input-group">
+                    <input type="text" class="page-jump form-control"  dir="rtl"/>
+                    <div class="input-group-append">
+                        <div class="input-group-text"> / <span th:text="${pageCount}"></span> 页 </div>
+                    </div>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary btn-jump"> Go </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <select class="form-control control-page-size">
+                    <option value="10" th:selected="${pageSize == 10}">每页显示10条记录</option>
+                    <option value="20" th:selected="${pageSize == 20}">每页显示20条记录</option>
+                    <option value="30" th:selected="${pageSize == 30}">每页显示30条记录</option>
+                    <option value="50" th:selected="${pageSize == 50}">每页显示50条记录</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <!--  /分页控件  -->
+    <script>
+        $(document).ready(()=>{
+            //给查询按钮添加监听时间,点击查询的时候重置page和pagesize
+            $(".search").click(function (){
+                $("input[name='page']").val(1);
+                $("input[name='pageSize']").val(10);
+            })
+
+            // 给 【删除】按钮 注册 点击事件
+            $(".brand-delete").click(function(){
+                // 让用户确认不可逆的操作
+                if( confirm("您确定要删除该品牌吗？") == false ){
+                    // 阻止超链接的默认事件
+                    event.preventDefault()
+                }
+            })
+
+            // 给 【Go】按钮 注册 点击事件
+            // 立即跳转
+            $(".btn-jump").click(function(){
+                let setPage =  $(".input-page-jump").val();
+                if (!isNaN(setPage)&&(setPage>0 && setPage<=pageCount)){
+                    $("input[name='page']").val(setPage)
+                    form1.submit()
+                }
+            })
+
+            // 加载 分页控件
+            let page = parseInt( $("input[name='page']").val() )
+            let pageCount = parseInt( $("#pageCount").val() )
+            // 判断 当前页 是否是在前4页
+            if( page <= 4 ){
+                // 循环数字页码
+                for( let i = 1 ; i <= ( pageCount < 7 ? pageCount : 7 ) ; i++ ){
+                    // 克隆一个数字控件
+                    let clone = $(".page-num").last().clone(true)
+
+                    // 修改克隆的数字控件的页码
+                    clone.text( i )
+
+                    // 判断 当前循环到的页面 是否就是 当前页
+                    if( i == page ){
+                        // 更改当前控件的样式
+                        clone.removeClass("btn-light")
+                        clone.addClass("btn-primary")
+                    }
+
+                    // 将 克隆的数字控件追加到 【下一页】的前面
+                    clone.insertBefore( $(".page-next") )
+
+                    // 将 克隆的数字控件 显示出来
+                    clone.show()
+                }
+                // 生成 【....】
+                if( pageCount > 7 ){
+                    // 克隆一个【...】
+                    let clone = $(".page-dote").last().clone(true)
+                    // 将 克隆的控件追加到 【下一页】的前面
+                    clone.insertBefore( $(".page-next") )
+                    // 将 克隆的控件 显示出来
+                    clone.show()
+                }
+            }
+            // 判断 当前页 是否是在最后4页
+            else if( page >= pageCount - 3 ){
+                // 生成 【....】
+                if( pageCount > 7 ){
+                    // 克隆一个【...】
+                    let clone = $(".page-dote").last().clone(true)
+                    // 将 克隆的控件追加到 【下一页】的前面
+                    clone.insertBefore( $(".page-next") )
+                    // 将 克隆的控件 显示出来
+                    clone.show()
+                }
+                // 循环数字页码
+                for( let i = pageCount - 6 ; i <= pageCount ; i++ ){
+                    // 克隆一个数字控件
+                    let clone = $(".page-num").last().clone(true)
+
+                    // 修改克隆的数字控件的页码
+                    clone.text( i )
+
+                    // 判断 当前循环到的页面 是否就是 当前页
+                    if( i == page ){
+                        // 更改当前控件的样式
+                        clone.removeClass("btn-light")
+                        clone.addClass("btn-primary")
+                    }
+
+                    // 将 克隆的数字控件追加到 【下一页】的前面
+                    clone.insertBefore( $(".page-next") )
+
+                    // 将 克隆的数字控件 显示出来
+                    clone.show()
+                }
+            }
+            // 当前页 在 中间页
+            else{
+                // 生成 【....】
+                if( pageCount > 7 ){
+                    // 克隆一个【...】
+                    let clone = $(".page-dote").last().clone(true)
+                    // 将 克隆的控件追加到 【下一页】的前面
+                    clone.insertBefore( $(".page-next") )
+                    // 将 克隆的控件 显示出来
+                    clone.show()
+                }
+                // 循环数字页码
+                for( let i = page - 3 ; i <= page + 3 ; i++ ){
+                    // 克隆一个数字控件
+                    let clone = $(".page-num").last().clone(true)
+
+                    // 修改克隆的数字控件的页码
+                    clone.text( i )
+
+                    // 判断 当前循环到的页面 是否就是 当前页
+                    if( i == page ){
+                        // 更改当前控件的样式
+                        clone.removeClass("btn-light")
+                        clone.addClass("btn-primary")
+                    }
+
+                    // 将 克隆的数字控件追加到 【下一页】的前面
+                    clone.insertBefore( $(".page-next") )
+
+                    // 将 克隆的数字控件 显示出来
+                    clone.show()
+                }
+                // 生成 【....】
+                if( pageCount > 7 ){
+                    // 克隆一个【...】
+                    let clone = $(".page-dote").last().clone(true)
+                    // 将 克隆的控件追加到 【下一页】的前面
+                    clone.insertBefore( $(".page-next") )
+                    // 将 克隆的控件 显示出来
+                    clone.show()
+                }
+            }
+
+            // 给 数字页码 控件 注册 点击事件
+            $(".page-num").click(function(){
+                // 让 表单中 当前页码控件的值 改变成当前页码
+                $("input[name='page']").val( $(this).text() )
+                // 让 表单提交
+                form1.submit()
+            })
+
+            // 给 每页显示记录数 下拉列表 注册 onchange事件
+            $(".control-page-size").change(function(){
+                // 将 每页显示记录数 下拉列表的 选中的值 赋值给 表单中的控件
+                $("input[name='pageSize']").val( $(this).val() )
+                // 让表单提交
+                form1.submit()
+            })
+            // 给 【下一页】 注册 onclick事件
+            $(".page-next").click(function(){
+                // 如果不是最后一页 让 表单中 当前页码控件的值 自增
+                if ($("input[name='page']").val() < $("#pageCount").val()) {
+                    $("input[name='page']").val(parseInt($("input[name='page']").val()) + 1)
+                    // 让 表单 提交
+                    form1.submit()
+                }
+            })
+            // 给 【上一页】 注册 onclick事件
+            $(".page-prev").click(function(){
+                // 如果不是第一页  让 表单中 当前页码控件的值 自减
+                if($("input[name='page']").val() >1){
+                    $("input[name='page']").val( parseInt( $("input[name='page']").val() ) - 1 )
+                    // 让 表单 提交
+                    form1.submit()
+                }
+            })
+            // 给 【首页】 注册 onclick事件
+            $(".page-first").click(function(){
+                // 让 表单中 当前页码控件的值 恢复到 第1页
+                $("input[name='page']").val( 1 )
+                // 让 表单 提交
+                form1.submit()
+            })
+            // 给 【末页】 注册 onclick事件
+            $(".page-last").click(function(){
+                // 让 表单中 当前页码控件的值 设置为 总页数
+                $("input[name='page']").val( $("#pageCount").val() )
+                // 让 表单 提交
+                form1.submit()
+            })
+        })
+    </script>
+    <script>
+    </script>
+</body>
+</html>

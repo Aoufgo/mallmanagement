@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加角色</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <link th:href="@{/css/bootstrap-4.6.1.min.css}" rel="stylesheet"/>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <form action="save" method="POST">
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">角色名称：</div>
+            </div>
+            <input type="text" name="role_name" class="form-control" placeholder="请输入角色名称"/>
+        </div>
+        <div class="my-2 px-3 info-name">
+
+        </div>
+
+        <div class="my-2 row">
+            <!--  一级权限  -->
+            <div class="my-2 col-4"  th:each="big:${permissions}" th:if="${big.pid} == null">
+                <div class="card" >
+                    <div class="card-header">
+                        <input type="checkbox" name="id_list"
+                                class="permission-big" th:value="${big.permission_id}" th:text="${big.permission_name}"/>
+                    </div>
+                    <!--  二级权限  -->
+                    <div class="card-body" th:each="mid:${permissions}" th:if="${mid.pid} == ${big.permission_id}">
+                        <input type="checkbox" name="id_list"
+                              class="permission-mid"  th:value="${mid.permission_id}" th:text="${mid.permission_name}"/>
+                        <!--  三级权限  -->
+                        <div class="my-2 pl-3 d-flex"  th:each="small:${permissions}" th:if="${small.pid} == ${mid.permission_id}">
+                            <div class="mr-2">
+                                <input type="checkbox" name="id_list"
+                                       class="permission-small"  th:value="${small.permission_id}" th:text="${small.permission_name}"/>
+                            </div>
+                        </div>
+                        <!--  /三级权限  -->
+                    </div>
+                    <!--  /二级权限  -->
+                </div>
+            </div>
+            <!--  /一级权限  -->
+        </div>
+
+        <button type="submit" class="btn btn-primary"> 添加角色 </button>
+    </form>
+</div>
+
+<script>
+        $(document).ready(()=>{
+            // 一级权限 change事件
+            $(".permission-big").change(function(){
+                // 判断 一级权限的选中状态
+                if( $(this).prop("checked") ){
+                    // 一级权限 处于 选中状态
+                    $(this).parents(".card").find(".permission-mid").prop("checked",true)
+                }else{
+                    // 一级权限 处于 非选中状态
+                    $(this).parents(".card").find(".permission-mid,.permission-small").prop("checked",false)
+                }
+            })
+
+            // 二级权限 change事件
+            $(".permission-mid").change(function(){
+                // 自动控制三级权限
+                // 判断 当前二级权限是否没有选中
+                if( $(this).prop("checked") == false ){
+                    // 当前二级权限的下属三级权限 都不要选中
+                    $(this).parents(".card-body").find(".permission-small").prop("checked",false)
+                }
+
+                // 自动控制一级权限
+                // 标记变量
+                let flag = 0
+                // 遍历 同一组中的所有二级权限
+                $(this).parents(".card").find(".permission-mid").each(function(){
+                    // 判断 当前遍历到的二级权限 是否选中
+                    if( $(this).prop("checked") == true ){
+                        // 一个二级权限选中 那么 一级权限就要选中
+                        $(this).parents(".card").find(".permission-big").prop("checked",true)
+                        // 改变标记变量的值
+                        flag = 13
+                    }
+                })
+                // 判断标记变量是否还是初始值
+                if( flag == 0 ){
+                    // 二级权限都没有选中 那么 一级权限就不要选中
+                    $(this).parents(".card").find(".permission-big").prop("checked",false)
+                }
+            })
+
+            // 三级权限 change事件
+            $(".permission-small").change(function(){
+                // 判断 当前三级权限的选中状态
+                if( $(this).prop("checked") ){
+                    // 将 二级权限 选中
+                    $(this).parents(".card-body").find(".permission-mid").prop("checked",true)
+                    // 将 一级权限 选中
+                    $(this).parents(".card").find(".permission-big").prop("checked",true)
+                }
+            })
+
+
+            // 角色名称 验证
+            $("input[name='role_name']").change(function(){
+                $.ajax({
+                    url : "/role/validName",
+                    type : "GET",
+                    data : { role_name : $(this).val() },
+                    success : function(data){
+                        if( data == "true" ){
+                            $(".info-name").html( "<font color='red'> 该角色名称已被使用！请重新填写！ </font>" )
+                        }else if( data == "false" ){
+                            $(".info-name").html( "<font color='green'> 该角色名称可以使用！ </font>" )
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+
+</body>
+</html>

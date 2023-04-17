@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aouf.mallmanagement.mapper.RoleMapper">
+
+    <resultMap id="roleMap" type="Role">
+        <id property="role_id" column="role_id" />
+        <result property="role_name" column="role_name"/>
+        <collection property="permissions" ofType="Permission">
+            <id property="permission_id" column="permission_id"/>
+            <result property="permission_name" column="permission_name"/>
+            <result property="pid" column="pid"/>
+        </collection>
+    </resultMap>
+    <select id="getAll" resultType="Role">
+        select *  from role r
+    </select>
+    <select id="getRoleByIdOrName" resultMap="roleMap">
+        select *
+        from role a left join role_permission rp on a.role_id = rp.role_id left join permission p on rp.permission_id = p.permission_id
+        <where>
+            <if test="role_id != null">
+                and a.role_id = #{role_id}
+            </if>
+            <if test="role_name != null and role_name.length>0">
+                and a.role_name = #{role_name}
+            </if>
+        </where>
+    </select>
+    <select id="getRolesByBo" resultType="Role">
+        select *
+        from role a
+        <where>
+            <if test="role_id != null">
+                and a.role_id = #{role_id}
+            </if>
+            <if test="role_name != null and role_name.length != 0">
+                and a.role_name like "%"#{role_name}"%"
+            </if>
+        </where>
+    </select>
+
+
+    <insert id="add" keyProperty="role_id" useGeneratedKeys="true">
+        INSERT INTO role
+            (role_name)
+        VALUES(#{role_name})
+    </insert>
+    <update id="update">
+        update role set role_name = #{role_name} where role_id = #{role_id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM role where
+        <foreach collection="ids" open="role_id in (" separator="," close=")"  item="id">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
