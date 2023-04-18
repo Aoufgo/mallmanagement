@@ -59,14 +59,14 @@ public class RoleController {
         return (roleService.getRoleByIdOrName(null,role_name)==null) ? "false":"true";
     }
 
-    @RequestMapping("/edit")
+    @RequestMapping("/update")
     public String edit(Model model,Integer role_id){
         // 角色信息
         model.addAttribute("permissions",permissionService.getAll());
         model.addAttribute("role",roleService.getRoleByIdOrName(role_id,null));
-        return null;
+        return "/role/edit";
     }
-    @RequestMapping("/update")
+    @RequestMapping("/alter")
     @ResponseBody
     public String update(AddRoleBo addRoleBo){
         return roleService.update(addRoleBo);

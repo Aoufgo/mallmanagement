@@ -10,26 +10,26 @@
 </head>
 <body>
 <div class="container-fluid">
-    <form action="#" method="POST">
+    <form action="save" method="POST">
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">分类名称：</div>
             </div>
-            <input type="text" class="form-control" placeholder="请输入分类名称"/>
+            <input name="cate_name" type="text" class="form-control" placeholder="请输入分类名称"/>
         </div>
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">分类排序：</div>
             </div>
-            <input type="text"  class="form-control" placeholder="请输入分类排序"/>
+            <input name="cate_sort" type="text"  class="form-control" placeholder="请输入分类排序"/>
         </div>
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">父级分类：</div>
             </div>
-            <select class="form-control">
+            <select name="cate_parentid" class="form-control">
                 <option value="">顶级分类</option>
-                <option value="父级分类id">父级分类</option>
+                <option th:each="parent:${parents}" th:text="${parent.cate_name}" th:value="${parent.cate_id}"></option>
             </select>
         </div>
 
@@ -46,9 +46,31 @@
                 <div class="input-group">
                     <select class="form-control brand-control">
                         <option >品牌名称</option>
+                        <option th:each="brand:${brands}" th:text="${brand.brand_name}" th:value="${brand.brand_id}"></option>
                     </select>
                     <div class="input-group-append">
                         <button type="button" class="btn btn-danger btn-brand-dis"> - </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="input-group my-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">商品属性：</div>
+            </div>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-success btn-key-add"> + </button>
+            </div>
+        </div>
+        <div class="my-2 row key-group">
+            <div class="col-3 key my-2">
+                <div class="input-group">
+                    <select class="form-control key-control">
+                        <option >属性名称</option>
+                        <option th:each="key:${keys}" th:text="${key.key_name}" th:value="${key.key_id}"></option>
+                    </select>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-danger btn-key-dis"> - </button>
                     </div>
                 </div>
             </div>
@@ -65,14 +87,50 @@ $(document).ready(()=>{
     // 重排 品牌 name
     function reloadBrandName(){
         $(".brand-control").each(function(index,dom){
-            $(this).prop("name","brandList["+index+"].brand_id")
+            $(this).prop("name","brands["+index+"].brand_id")
         })
     }
-
-    // +添加品牌
-
-    // -删除品牌
-
+    function reloadKeyName(){
+        $(".key-control").each(function(index,dom){
+            $(this).prop("name","keys["+index+"].key_id")
+        })
+    }
+    // 删除角色
+    $(".btn-brand-dis").click(function(){
+        // 判断是否只剩下最后一个角色
+        if( $(".brand").length > 1 ){
+            // 剩下不止一个角色 可以删除角色
+            $(this).parents(".brand").remove()
+            // 重新排列角色下拉列表的name
+            reloadBrandName()
+        }
+    })
+    $(".btn-key-dis").click(function(){
+        // 判断是否只剩下最后一个角色
+        if( $(".key").length > 1 ){
+            // 剩下不止一个角色 可以删除角色
+            $(this).parents(".key").remove()
+            // 重新排列角色下拉列表的name
+            reloadKeyName()
+        }
+    })
+    // 添加角色
+    $(".btn-key-add").click(function(){
+        // 克隆 一份 角色
+        let clone = $(".key").last().clone(true)
+        // 将 克隆的 角色 追加到 角色列表
+        clone.appendTo( $(".key-group") )
+        // 重新排列角色下拉列表的name
+        reloadKeyName()
+    })
+    $(".btn-brand-add").click(function(){
+        // 克隆 一份 角色
+        let clone = $(".brand").last().clone(true)
+        // 将 克隆的 角色 追加到 角色列表
+        clone.appendTo( $(".brand-group") )
+        // 重新排列角色下拉列表的name
+        reloadBrandName()
+    })
 
 })
 

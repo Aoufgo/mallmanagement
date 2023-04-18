@@ -68,7 +68,7 @@
                 <td>
                     <div class="btn-group btn-group-sm">
                         <a href="#" class="btn btn-light">查看</a>
-                        <a th:href="'edit?role_id='+${role.role_id}" class="btn btn-success"> 编辑 </a>
+                        <a th:href="'update?role_id='+${role.role_id}" class="btn btn-success"> 编辑 </a>
                         <a th:onclick="'deleteByid('+${role.role_id}+')'" class="btn btn-danger link-delete">删除</a>
                     </div>
                 </td>

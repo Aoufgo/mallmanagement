@@ -22,10 +22,13 @@
             <result property="key_name" column="key_name"/>
         </collection>
     </resultMap>
-    <select id="getOne" resultType="Category">
-        select cate_id ,cate_name ,cate_sort ,createtime ,updatetime ,cate_parentid
+    <select id="getOne" resultMap="CategoryMap">
+        select c.cate_id,c.cate_name,c.cate_sort,c.createtime,c.updatetime,c.cate_parentid,c2.cate_name as cate_parentname,b.brand_id,b.brand_name,s.key_id,s.key_name
         from category c
-        where cate_id =#{cate_id}
+             left join brand_categories bc on c.cate_id = bc.category_id left join brand b on bc.brand_id = b.brand_id
+             left join spu_attr_key_categories sc on c.cate_id = sc.category_id left join spu_attr_key s on sc.spu_attr_key_id = s.key_id
+             left join category c2 on c.cate_parentid = c2.cate_id
+        where c.cate_id =#{cate_id}
     </select>
     <select id="getCategoriesByBo" resultMap="CategoryMap">
         select c.cate_id,c.cate_name,c.cate_sort,c.createtime,c.updatetime,c.cate_parentid,c2.cate_name as cate_parentname,b.brand_id,b.brand_name,s.key_id,s.key_name
@@ -48,4 +51,21 @@
     <select id="getAllParentCategories" resultType="category">
         select cate_id,cate_name from category where cate_parentid is null
     </select>
+    <insert id="add" keyProperty="cate_id" useGeneratedKeys="true">
+        INSERT INTO category
+            (cate_name,cate_sort,cate_parentid)
+        VALUES(#{cate_name},#{cate_sort},#{cate_parentid})
+    </insert>
+    <insert id="addBrandCate">
+        insert into brand_categories (brand_id,category_id) values (#{brand_id},#{category_id})
+    </insert>
+    <delete id="deleteBrandCateByCateId">
+        delete from brand_categories where category_id = #{category_id}
+    </delete>
+    <insert id="addKeyCate">
+        insert into spu_attr_key_categories (spu_attr_key_id,category_id) values (#{spu_attr_key_id},#{category_id})
+    </insert>
+    <delete id="deleteKeyCateByCateId">
+        delete from spu_attr_key_categories where category_id = #{category_id}
+    </delete>
 </mapper>

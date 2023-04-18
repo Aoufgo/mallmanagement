@@ -63,7 +63,7 @@ public class AdminController {
         return adminService.add(addAdminBo);
     }
 
-    @RequestMapping("/edit")
+    @RequestMapping("/update")
     public String edit(Model model,Integer admin_id){
         // 角色信息
         model.addAttribute("roles",roleService.getAll());
@@ -71,10 +71,10 @@ public class AdminController {
         SearchAdminBo searchAdminBo = new SearchAdminBo();
         searchAdminBo.setAdmin_id(admin_id);
         model.addAttribute("admin",adminService.getAdminsByBo(searchAdminBo).get(0));
-        return null;
+        return "/admin/edit";
     }
 
-    @RequestMapping("/update")
+    @RequestMapping("/alter")
     @ResponseBody
     public String update(AddAdminBo addAdminBo){
         return adminService.update(addAdminBo);

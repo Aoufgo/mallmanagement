@@ -45,8 +45,8 @@
             </div>
             <div class="col-4 my-2">
                 <div class="btn-group">
-                    <button type="submit" class="btn btn-primary"> 查 询 </button>
-                    <a href="#" class="btn btn-success"> 添加分类 </a>
+                    <button type="submit" class="btn btn-primary search"> 查 询 </button>
+                    <a href="add" class="btn btn-success"> 添加分类 </a>
                     <button type="button" class="btn btn-danger btn-multi-delete"> 批量删除 </button>
                 </div>
                 <input type="hidden" name="pageSize" th:value="${pageSize}" />
@@ -87,7 +87,7 @@
                 <td>
                     <div class="btn-group btn-group-sm">
                         <a href="" class="btn btn-light">查看</a>
-                        <a href="#" class="btn btn-warning">编辑</a>
+                        <a th:href="'update?cate_id='+${cate.cate_id}" class="btn btn-success"> 编辑 </a>
                         <a href="#" class="btn btn-danger link-delete">删除</a>
                     </div>
                 </td>

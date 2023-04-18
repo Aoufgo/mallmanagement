@@ -1,6 +1,7 @@
 package com.aouf.mallmanagement.mapper;
 
 
+import com.aouf.mallmanagement.bean.bo.AddCategoryBo;
 import com.aouf.mallmanagement.bean.bo.SearchCategoryBo;
 import com.aouf.mallmanagement.bean.po.Category;
 import com.github.pagehelper.Page;
@@ -20,5 +21,10 @@ public interface CategoryMapper {
     );
     Page<Category> getCategoriesByBo(SearchCategoryBo searchCategoryBo);
     List<Category> getAllParentCategories();
+    Integer add(AddCategoryBo addCategoryBo);
+    Integer addBrandCate(String brand_id,Integer category_id);
+    Integer deleteBrandCateByCateId(Integer category_id);
+    Integer addKeyCate(String spu_attr_key_id,Integer category_id);
+    Integer deleteKeyCateByCateId(Integer category_id);
 
 }
