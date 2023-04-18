@@ -39,7 +39,7 @@
                     </div>
                     <select class="form-control" name="cate_parentid">
                         <option value="">--所有分类--</option>
-                        <option th:each="parent:${parents}" th:text="${parent.cate_name}" th:value="${parent.cate_id}"></option>
+                        <option th:each="parent:${parents}" th:text="${parent.cate_name}" th:value="${parent.cate_id}" th:selected="${parent.cate_id} == ${searchCategoryBo.cate_parentid}"></option>
                         </select>
                 </div>
             </div>
