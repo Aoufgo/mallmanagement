@@ -37,6 +37,9 @@
         </where>
         ) t
     </select>
+    <select id="getAllBrand" resultType="brand">
+        select * from brand b
+    </select>
     <insert id="add">
         INSERT INTO brand
         (brand_id, brand_name, brand_introduction, brand_logourl, sortno, createtime, updatetime)

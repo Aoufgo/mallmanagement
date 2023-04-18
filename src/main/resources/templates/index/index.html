@@ -100,11 +100,17 @@
 
         <div th:each="big:${admin.menus}">
             <div th:if="${big.pid}==null">
-                <li class="list-group-item list-group-item-slider  hand nopadding nomargin noborder"><a href="javascript:void(0)" class="full-link list-group-item-link list-group-item-link-parent"><img th:src="@{/img/57323.png}" height="20px" class="img img-circle"/>&nbsp;<span th:text="${big.menu_name}"></span>&nbsp; <img th:src="@{/img/j14.png}" height="20px" class="img  img-circle img-arrow" style="position: absolute; right: 10px; top: 10px; opacity: 0.7;"/></a></li>
+                <li class="list-group-item list-group-item-slider  hand nopadding nomargin noborder">
+                    <a href="javascript:void(0)" class="full-link list-group-item-link list-group-item-link-parent">
+                        <img th:src="@{/img/57323.png}" height="20px" class="img img-circle"/>&nbsp;
+                        <span th:text="${big.menu_name}"></span>&nbsp;
+                        <img th:src="@{/img/j14.png}" height="20px" class="img  img-circle img-arrow" style="position: absolute; right: 10px; top: 10px; opacity: 0.7;"/>
+                    </a>
+                </li>
                 <ul class="list-group nomargin nopadding noborder" style="display: none;">
                     <div th:each="small:${admin.menus}">
                         <div th:if="${small.pid} == ${big.menu_id}">
-                            <li class="list-group-item list-group-item-slider hand nopadding nomargin noborder"><a href="javascript:void(0)" th:id="@{${small.menu_url}}" target="iframe-index" class="full-link list-group-item-link-small list-group-item-url"><img th:src="@{/img/48323.png}" height="20px" class="img img-circle"/>&nbsp;&nbsp;<span th:text="${small.menu_name}"></span>  </a></li>
+                            <li class="list-group-item list-group-item-slider hand nopadding nomargin noborder"><a href="javascript:void(0)" th:id="${small.menu_url}" target="iframe-index" class="full-link list-group-item-link-small list-group-item-url"><img th:src="@{/img/48323.png}" height="20px" class="img img-circle"/>&nbsp;&nbsp;<span th:text="${small.menu_name}"></span>  </a></li>
                         </div>
                     </div>
                 </ul>

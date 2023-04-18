@@ -14,6 +14,7 @@ public interface IBrandService {
 
     // 通过id或name查询,name为模糊查询
     List<Brand> getBrandsByBo(SearchBrandBo searchBrandBo);
+    List<Brand> getAllBrand();
     Integer getBrandsByBoCount(SearchBrandBo searchBrandBo);
 
     //添加品牌信息

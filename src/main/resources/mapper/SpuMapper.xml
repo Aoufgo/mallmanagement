@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC
+        "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.aouf.mallmanagement.mapper.SpuMapper">
+    <resultMap id="SpuMap" type="Spu">
+        <id property="spu_id" column="spu_id" />
+        <result property="spu_name" column="spu_name"/>
+        <result property="spu_title" column="spu_title"/>
+        <result property="spu_introduction" column="spu_introduction"/>
+        <result property="spu_unit" column="spu_unit"/>
+        <result property="spu_status" column="spu_status"/>
+        <result property="createtime" column="createtime"/>
+        <result property="updatetime" column="updatetime"/>
+        <association property="brand" javaType="brand">
+            <id property="brand_id" column="spu_brand_id"/>
+            <result property="brand_name" column="brand_name"/>
+        </association>
+        <collection property="categoryList" ofType="category">
+            <id property="cate_id" column="cate_id"/>
+            <result property="cate_name" column="cate_name"/>
+        </collection>
+    </resultMap>
+    <select id="getOne" resultType="Spu">
+
+    </select>
+    <select id="getSpusByBo" resultMap="SpuMap">
+        select s.spu_id,s.spu_name,s.spu_brand_id, b.brand_name,s.createtime,s.updatetime,s.spu_unit,s.spu_status
+        from spu s
+        left join brand b on s.spu_brand_id = b.brand_id
+        <where>
+            <if test="spu_id !=null">
+                s.spu_id = #{spu_id}
+            </if>
+            <if test="spu_status !=null">
+                s.spu_status = #{spu_status}
+            </if>
+            <if test="spu_name != null and spu_name.length != 0">
+                and s.spu_name like "%"#{spu_name}"%"
+            </if>
+            <if test="spu_brand_id != null and spu_brand_id.length != 0">
+                and s.spu_brand_id = #{spu_brand_id}
+            </if>
+        </where>
+    </select>
+
+</mapper>

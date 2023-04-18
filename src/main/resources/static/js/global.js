@@ -186,19 +186,19 @@
 		
 		$(".list-group-item-link-parent").parents(".list-group-item-slider").next("ul").stop(true,false);
 
-		if(  $(this).find(".img-arrow").attr("src") == "img/j14.png"){
+		if(  $(this).find(".img-arrow").attr("src") == "/img/j14.png"){
 			
-			$(".list-group-item-link-parent").find(".img-arrow").attr("src","img/j14.png")
+			$(".list-group-item-link-parent").find(".img-arrow").attr("src","/img/j14.png")
 			$(".list-group-item-link-parent").parents(".list-group-item-slider").next("ul").slideUp(300);
 			$(".list-group-item-link-parent").css( { "background-color":"#393D49" ,"border-left":"8px solid #393D49"} );
 			$(".list-group-item-link-parent").removeClass("flag");
 			
-			$(this).find(".img-arrow").attr("src","img/j15.png")
+			$(this).find(".img-arrow").attr("src","/img/j15.png")
 			$(this).parents(".list-group-item-slider").next("ul").slideDown(300);
 			$(this).css( { "background-color":"#292D29" ,"border-left":"8px solid #1AA094" } );
 			$(this).addClass("flag");
 		}else{
-			$(this).find(".img-arrow").attr("src","img/j14.png")
+			$(this).find(".img-arrow").attr("src","/img/j14.png")
 			$(this).parents(".list-group-item-slider").next("ul").slideUp(300);
 			$(this).css( { "background-color":"#393D49"  } );
 			$(this).removeClass("flag");
@@ -213,12 +213,12 @@
 			$("#face").fadeOut();
 			$(this).removeClass("switch-on");
 			$(this).addClass("switch-off");
-			$(this).attr("src","img/j14.png");
+			$(this).attr("src","/img/j14.png");
 		}else{
 			$("#face").fadeIn();
 			$(this).removeClass("switch-off");
 			$(this).addClass("switch-on");
-			$(this).attr("src","img/j15.png");
+			$(this).attr("src","/img/j15.png");
 		}
 	});
 	
@@ -295,7 +295,7 @@
 		if( flag == 0 ){
 			$(".iframe-index").hide();
 			$("#panel-right").append("<iframe src='"+url+"' class='iframe-index' name='iframe-index'></iframe>");
-			$("#panel-right-nav-head").append( "<div id='"+url+"' class='left cap-title cap-title-active hand' align='center'><img src='img/57323.png' height='20px' class='img img-circle hand'/> "+$(this).text()+" &nbsp;&nbsp;<div class='div-close float-right' >×</div></div>" );
+			$("#panel-right-nav-head").append( "<div id='"+url+"' class='left cap-title cap-title-active hand' align='center'><img src='/img/57323.png' height='20px' class='img img-circle hand'/> "+$(this).text()+" &nbsp;&nbsp;<div class='div-close float-right' >×</div></div>" );
 			$(".iframe-index").stop(true,true);
 			$(".iframe-index").css({"top":"30px","opacity":"0"});
 			$(".iframe-index").animate({"top":"0px","opacity":"1.0"},600);
@@ -364,7 +364,7 @@
         if( flag == 0 ){
             $(window.parent.document).find(".iframe-index").hide();
             $(window.parent.document).find("#panel-right").append("<iframe src='" + url + "' class='iframe-index' name='iframe-index'></iframe>");
-            $(window.parent.document).find("#panel-right-nav-head").append("<div id='" + url + "' class='left cap-title cap-title-active hand' align='center'><img src='img/57323.png' height='20px' class='img img-circle hand'/> " + $(this).text() + " &nbsp;&nbsp;<div class='div-close float-right' >×</div></div>");
+            $(window.parent.document).find("#panel-right-nav-head").append("<div id='" + url + "' class='left cap-title cap-title-active hand' align='center'><img src='/img/57323.png' height='20px' class='img img-circle hand'/> " + $(this).text() + " &nbsp;&nbsp;<div class='div-close float-right' >×</div></div>");
             $(window.parent.document).find(".iframe-index").stop(true, true);
             $(window.parent.document).find(".iframe-index").css({ "top": "30px", "opacity": "0" });
             $(window.parent.document).find(".iframe-index").animate({ "top": "0px", "opacity": "1.0" }, 600);

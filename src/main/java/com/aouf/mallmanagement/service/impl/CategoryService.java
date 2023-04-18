@@ -17,7 +17,7 @@ public class CategoryService implements ICategoryService {
 
     //成员属性,下层对象是数据访问层CategoryMapper接口类型(Autowired/Resource注解二选一)
     @Autowired
-    CategoryMapper categoryMapper;
+    private CategoryMapper categoryMapper;
 
 
     @Override

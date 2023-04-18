@@ -34,7 +34,7 @@ a:visited{text-decoration: none;}
 .navbar .navbar-nav li a{color: #ccc;}
 .navbar .navbar-nav li a:hover{color:#ccc;}
 .navbar .navbar-nav li a:active{color:#ccc; background-color: #23262E;}
-.navbar .navbar-nav li{#ccc;}
+.navbar .navbar-nav li{color:#ccc;}
 .nav-dropdown-menu{ background-color: #1AA094; color: #ccc; padding: 0px; margin: 0px; }
 .nav-dropdown-menu-item{margin: 0px; padding: 10px 0px 10px 0px;}
 .nav-dropdown-menu-item a{display: block; margin: 0px; padding: 0px; height: 100%;}

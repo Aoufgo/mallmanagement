@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加商品Spu</title>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <link th:href="@{/css/bootstrap-4.6.1.min.css}" rel="stylesheet"/>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <form action="#" method="POST" >
+
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">商品名称：</div>
+            </div>
+            <input type="text" name="spu_name" class="form-control" placeholder="请输入商品名称"/>
+        </div>
+
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">商品标题：</div>
+            </div>
+            <input type="text" name="spu_title" class="form-control" placeholder="请输入商品标题"/>
+        </div>
+
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">商品单位：</div>
+            </div>
+            <input type="text" name="spu_unit" class="form-control" placeholder="请输入商品单位"/>
+        </div>
+
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">商品状态：</div>
+            </div>
+            <select name="spu_status" class="form-control">
+                <option value="1">上架</option>
+                <option value="0">下架</option>
+            </select>
+        </div>
+
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">商品品牌：</div>
+            </div>
+            <select name="spu_brand_id" class="form-control">
+                <option>商品品牌</option>
+            </select>
+        </div>
+
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">商品分类：</div>
+            </div>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-success btn-category-add"> + </button>
+            </div>
+        </div>
+
+        <div class="row my-2 category-group">
+            <div class="col-3 category my-2">
+                <div class="input-group">
+                    <select name="categoryList[0].cate_id" class="form-control btn-category-controller">
+                        <option >商品分类</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-danger btn-category-dis"> - </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">筛选属性：</div>
+            </div>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-success btn-filter-add"> + </button>
+            </div>
+        </div>
+
+        <div class="row my-2 filter-group">
+            <div class="col-6 filter my-2">
+                <div class="input-group">
+                    <select class="form-control attr-key">
+                        <option value="">--请选择属性键--</option>
+                    </select>
+                    <select name="filterAttrValueList[0].spu_attr_value_id" class="form-control btn-filter-controller attr-value">
+                    </select>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-danger btn-filter-dis"> - </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">规格属性：</div>
+            </div>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-success btn-sku-add"> + </button>
+            </div>
+        </div>
+
+        <div class="row my-2 sku-group">
+            <div class="col-12 sku my-2">
+                <div class="input-group">
+                    <select class="form-control attr-key">
+                        <option value="">--请选择属性键--</option>
+                    </select>
+                    <select name="skuAttrValueList[0].spu_attr_value_id" class="form-control btn-sku-controller attr-value">
+                    </select>
+                    <input type="file" name="skuAttrValueList[0].spu_attr_image_list" class="form-control btn-sku-image-controller" multiple/>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-danger btn-sku-dis"> - </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">商品详情：</div>
+            </div>
+            <textarea name="spu_introduction" class="form-control" placeholder="请输入商品详情" rows="6"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary"> 添加商品Spu </button>
+
+    </form>
+</div>
+
+<div style="height:100px;"></div>
+
+
+<script>
+$(document).ready(()=>{
+
+    // ---------------- 规格属性 ----------------
+    // 重排规格属性控件的name
+    function reloadSkuName(){
+        $(".btn-sku-controller").each(function(index,dom){
+            $(this).prop( "name" , "skuAttrValueList["+index+"].spu_attr_value_id" )
+        })
+        $(".btn-sku-image-controller").each(function(index,dom){
+            $(this).prop( "name" , "skuAttrValueList["+index+"].spu_attr_image_list" )
+        })
+    }
+
+    // 添加规格属性
+    $(".btn-sku-add").click(function(){
+        // 克隆
+        let clone = $(".sku").last().clone(true)
+        // 追加
+        clone.appendTo( $(".sku-group") )
+        // 重排规格属性控件的name
+        reloadSkuName()
+    })
+
+    // 删除分类
+    $(".btn-sku-dis").click(function(){
+        // 判断是否可以删除
+        if( $(".sku").length > 1 ){
+            $(this).parents(".sku").remove()
+            // 重排规格属性控件的name
+            reloadSkuName()
+        }
+    })
+
+    // ---------------- 筛选属性 ----------------
+    // 重排筛选属性控件的name
+    function reloadFilterName(){
+        $(".btn-filter-controller").each(function(index,dom){
+            $(this).prop( "name" , "filterAttrValueList["+index+"].spu_attr_value_id" )
+        })
+    }
+
+    // 添加筛选属性
+    $(".btn-filter-add").click(function(){
+        // 克隆
+        let clone = $(".filter").last().clone(true)
+        // 追加
+        clone.appendTo( $(".filter-group") )
+        // 重排筛选属性控件的name
+        reloadFilterName()
+    })
+
+    // 删除分类
+    $(".btn-filter-dis").click(function(){
+        // 判断是否可以删除
+        if( $(".filter").length > 1 ){
+            $(this).parents(".filter").remove()
+            // 重排筛选属性控件的name
+            reloadFilterName()
+        }
+    })
+
+    // ---------------- 商品属性 ----------------
+    // 改变了选中的属性键
+    $(".attr-key").change(function(){
+        // 将 当前被改变的属性键 存放起来
+        let that = this
+        // 发送 ajax请求 查询 该属性键的属性值列表
+        $.ajax({
+            url : "/attr-value/getListByKeyId",
+            type : "GET",
+            data : { "key_id" : $(this).val() },
+            success : function(response){
+                // 将 响应的字符串 转换成 json 对象
+                response = JSON.parse( response )
+                // 先清空属性值下拉列表中原来的选项
+                $(that).nextAll(".attr-value").html("")
+                // 遍历 每一个属性值
+                for( let spuAttrValue of response ){
+                    let op = new Option( spuAttrValue.value_name , spuAttrValue.id )
+                    $(that).nextAll(".attr-value").get(0).options.add( op )
+                }
+            }
+        })
+    })
+
+    // ---------------- 商品分类 ----------------
+    // 重排分类控件的name
+    function reloadCategoryName(){
+        $(".btn-category-controller").each(function(index,dom){
+            $(this).prop( "name" , "categoryList["+index+"].cate_id" )
+        })
+    }
+
+    // 添加分类
+    $(".btn-category-add").click(function(){
+        // 克隆
+        let clone = $(".category").last().clone(true)
+        // 追加
+        clone.appendTo( $(".category-group") )
+        // 重排分类控件的name
+        reloadCategoryName()
+    })
+
+    // 删除分类
+    $(".btn-category-dis").click(function(){
+        // 判断是否可以删除
+        if( $(".category").length > 1 ){
+            $(this).parents(".category").remove()
+            // 重排分类控件的name
+            reloadCategoryName()
+        }
+    })
+})
+</script>
+
+</body>
+</html>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>分类管理</title>
+    <title>商品Spu管理</title>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/popper.min.js}"></script>
     <link th:href="@{/css/bootstrap-4.6.1.min.css}" rel="stylesheet"/>
@@ -17,37 +17,48 @@
             <div class="col-4 my-2">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">分类编号：</div>
+                        <div class="input-group-text">商品Spu编号：</div>
                     </div>
-                    <input th:value="${searchCategoryBo.cate_id}" name="cate_id" type="text" class="form-control" placeholder="分类编号"
-                           />
+                    <input th:value="${searchSpuBo.spu_id}" name="spu_id" type="text" class="form-control" placeholder="商品编号"
+                    />
                 </div>
             </div>
             <div class="col-4 my-2">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">分类名称：</div>
+                        <div class="input-group-text">商品Spu名称：</div>
                     </div>
-                    <input th:value="${searchCategoryBo.cate_name}" name="cate_name" type="text" class="form-control" placeholder="分类名称"
-                           />
+                    <input th:value="${searchSpuBo.spu_name}" name="spu_name" type="text" class="form-control" placeholder="商品Spu名称"
+                    />
                 </div>
             </div>
             <div class="col-4 my-2">
                 <div class="input-group">
                     <div class="input-group-prepend">
-                        <div class="input-group-text">父级分类：</div>
+                        <div class="input-group-text">商品状态：</div>
                     </div>
-                    <select class="form-control" name="cate_parentid">
-                        <option value="">--所有分类--</option>
-                        <option th:each="parent:${parents}" th:text="${parent.cate_name}" th:value="${parent.cate_id}" th:selected="${parent.cate_id} == ${searchCategoryBo.cate_parentid}"></option>
-                        </select>
+                    <select class="form-control" name="spu_status">
+                        <option th:selected="${searchSpuBo.spu_status} == ''" value="">所有</option>
+                        <option th:selected="${searchSpuBo.spu_status} == '1'" value="1">上架</option>
+                        <option th:selected="${searchSpuBo.spu_status} == '0'" value="0">下架</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-4 my-2">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">商品品牌：</div>
+                    </div>
+                    <select class="form-control" name="spu_brand_id">
+                        <option value="">所有品牌</option>
+                        <option th:each="brand:${brands}" th:text="${brand.brand_name}" th:value="${brand.brand_id}" th:selected="${brand.brand_id} == ${searchSpuBo.spu_brand_id}"></option>
+                    </select>
                 </div>
             </div>
             <div class="col-4 my-2">
                 <div class="btn-group">
-                    <button type="submit" class="btn btn-primary"> 查 询 </button>
+                    <button type="submit" class="btn btn-primary search"> 查 询 </button>
                     <a href="#" class="btn btn-success"> 添加分类 </a>
-                    <button type="button" class="btn btn-danger btn-multi-delete"> 批量删除 </button>
                 </div>
                 <input type="hidden" name="pageSize" th:value="${pageSize}" />
                 <input type="hidden" name="page" th:value="${page}" />
@@ -61,34 +72,33 @@
 
 <!--  数据表格  -->
 <div class="container-fluid my-3">
-    <form action="" method="POST" name="form2">
+    <form action="#" method="POST" name="form2">
         <table class="table table-sm table-bordered table-striped cbx-group">
             <thead>
             <tr>
-                <th> <input type="checkbox" class="cbx-all"/> </th>
-                <th> 分类编号 </th>
-                <th> 分类名称 </th>
-                <th> 分类排序 </th>
-                <th> 父级分类 </th>
+                <th> Spu编号 </th>
+                <th> Spu名称 </th>
+                <th> 所属品牌 </th>
+                <th> Spu单位 </th>
+                <th> Spu状态 </th>
                 <th> 创建时间 </th>
                 <th> 更新时间 </th>
                 <th> 操作选项 </th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="cate:${categories}" >
-                <td> <input type="checkbox" th:value="${cate.cate_id}"/> </td>
-                <td th:text="${cate.cate_id}" > 分类编号 </td>
-                <td th:text="${cate.cate_name}" > 分类名称 </td>
-                <td th:text="${cate.cate_sort}"> 分类排序 </td>
-                <td th:text="${cate.cate_parentname}"> 父级分类 </td>
-                <td th:text="${cate.createtime}"> 创建时间 </td>
-                <td th:text="${cate.updatetime}"> 更新时间 </td>
+            <tr  th:each="spu:${spus}">
+                <td th:text="${spu.spu_id}" ></td>
+                <td th:text="${spu.spu_name}" ></td>
+                <td th:text="${spu.brand.brand_name}" ></td>
+                <td th:text="${spu.spu_unit}" ></td>
+                <td th:text="${spu.spu_status}" ></td>
+                <td th:text="${spu.createtime}" ></td>
+                <td th:text="${spu.updatetime}" ></td>
                 <td>
                     <div class="btn-group btn-group-sm">
-                        <a href="" class="btn btn-light">查看</a>
-                        <a href="#" class="btn btn-warning">编辑</a>
-                        <a href="#" class="btn btn-danger link-delete">删除</a>
+                        <a href="#" class="btn btn-light">查看</a>
+                        <a th:href="'edit?spu_id='+${spu.spu_id}" class="btn btn-success"> 编辑 </a>
                     </div>
                 </td>
             </tr>
@@ -142,13 +152,6 @@
             $("input[name='page']").val(1);
             $("input[name='pageSize']").val(10);
         })
-
-        ////////////////////////////////////////////////////////////////////////
-        // todo,单选删除
-
-        // todo,批量删除
-
-        ////////////////////////////////////////////////////////////////////////
         // 分页的公共效果
         // 加载数字页码控件
         let page = parseInt( $("input[name='page']").val() )
@@ -239,8 +242,8 @@
 
         // 给数字页码控件 注册点击事件
         $(".btn-number").click(function(){
-             $("input[name='page']").val( $(this).text() )
-             form1.submit()
+            $("input[name='page']").val( $(this).text() )
+            form1.submit()
         })
 
         // 【首页】
@@ -278,7 +281,7 @@
         })
         ////////////////////////////////////////////////////////////////////////
     })
-    </script>
+</script>
 
 </body>
 </html>

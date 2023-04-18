@@ -23,6 +23,7 @@ public class CategoryController {
         PageInfo<Category> catePageInfo = categoryService.getCategoriesByBo(searchCategoryBo);
         model.addAttribute("categories",catePageInfo.getList());
         model.addAttribute("parents",categoryService.getAllParentCategories());
+
         model.addAttribute("searchCategoryBo",searchCategoryBo);
         model.addAttribute("pageCount", catePageInfo.getPages());
         model.addAttribute("page",searchCategoryBo.getPage());

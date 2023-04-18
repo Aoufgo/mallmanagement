@@ -33,6 +33,12 @@ public class BrandService
     public List<Brand> getBrandsByBo(SearchBrandBo searchBrandBo) {
         return brandMapper.getBrandsByBo(searchBrandBo);
     }
+
+    @Override
+    public List<Brand> getAllBrand() {
+        return brandMapper.getAllBrand();
+    }
+
     @Override
     public Integer getBrandsByBoCount(SearchBrandBo searchBrandBo) {
         return brandMapper.getBrandsByBoCount(searchBrandBo);

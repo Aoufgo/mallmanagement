@@ -18,6 +18,7 @@ public interface BrandMapper {
             String brand_id);
 
     List<Brand> getBrandsByBo(SearchBrandBo searchBrandBo);
+    List<Brand> getAllBrand();
     Integer getBrandsByBoCount(SearchBrandBo searchBrandBo);
 
     //添加品牌........适配于添加品牌的界面
