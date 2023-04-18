@@ -30,7 +30,7 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @RequestMapping("/list")
+    @RequestMapping("/admin")
     public String admin(Model model, SearchRoleBo searchRoleBo){
         PageInfo<Role> rolePageInfo = roleService.getRolesByBo(searchRoleBo);
         model.addAttribute("roles",rolePageInfo.getList());
@@ -38,7 +38,7 @@ public class RoleController {
         model.addAttribute("pageCount", rolePageInfo.getPages());
         model.addAttribute("page",searchRoleBo.getPage());
         model.addAttribute("pageSize",searchRoleBo.getPageSize());
-        return null;
+        return "/role/list";
     }
 
     @RequestMapping("/add")

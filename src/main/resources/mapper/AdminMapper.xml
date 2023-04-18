@@ -14,6 +14,12 @@
             <id property="role_id" column="role_id"/>
             <result property="role_name" column="role_name"/>
         </collection>
+        <collection property="menus" ofType="Menu">
+            <id property="menu_id" column="menu_id"/>
+            <result property="menu_name" column="menu_name"/>
+            <result property="menu_url" column="menu_url"/>
+            <result property="pid" column="pid"/>
+        </collection>
     </resultMap>
     <select id="getAdminsByBo" resultMap="adminMap">
         <bind name="index" value="(page-1) * pageSize"/>
@@ -57,8 +63,13 @@
         ) t
     </select>
 
-    <select id="getAdminByIdOrName" resultType="Admin">
-        select * from  admin
+    <select id="getAdminByIdOrName" resultMap="adminMap">
+        select *
+        from admin a
+        left join admin_role ar on a.admin_id = ar.admin_id left join role r on ar.role_id = r.role_id
+        left join role_permission rp on r.role_id = rp.role_id left join permission_menu pm on pm.permission_id = rp.permission_id
+        left join menu m on pm.menu_id = m.menu_id
+
         <where>
             <if test="admin_id!=null and admin_id.length>0">
                 admin_id = #{admin_id}

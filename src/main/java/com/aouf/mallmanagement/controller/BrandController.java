@@ -29,7 +29,7 @@ public class BrandController {
     }
 
     //查询品牌列表的视图方法
-    @RequestMapping("/list")        //访问到/brand/list的时候，定位到当前视图文件
+    @RequestMapping("/admin")        //访问到/brand/list的时候，定位到当前视图文件
     public String list(Model model, SearchBrandBo searchBrandBo){
         List<Brand> brandsByBo = brandService.getBrandsByBo(searchBrandBo);
         model.addAttribute("list",brandsByBo);
@@ -38,7 +38,7 @@ public class BrandController {
         model.addAttribute("pageCount",(int)Math.ceil((float)brandService.getBrandsByBoCount(searchBrandBo)/ searchBrandBo.getPageSize()));
         model.addAttribute("page",searchBrandBo.getPage());
         model.addAttribute("pageSize",searchBrandBo.getPageSize());
-        return null;
+        return "/brand/list";
     }
 
     //添加品牌的视图方法

@@ -7,7 +7,10 @@ import com.aouf.mallmanagement.bean.po.Role;
 import com.aouf.mallmanagement.mapper.AdminMapper;
 import com.aouf.mallmanagement.mapper.AdminRoleMapper;
 import com.aouf.mallmanagement.service.IAdminService;
+import com.github.pagehelper.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -115,5 +118,17 @@ public class AdminService implements IAdminService {
     @Override
     public Admin getAdminByIdOrName(Integer admin_id, String admin_name) {
         return adminMapper.getAdminByIdOrName(admin_id,admin_name);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        if (StringUtil.isEmpty(username)){
+            throw new UsernameNotFoundException("用户名为空!");
+        }
+        Admin admin = adminMapper.getAdminByIdOrName(null, username );
+        if( admin == null ){
+            throw new UsernameNotFoundException("账户名称或密码错误！请重新填写！");
+        }
+        return admin;
     }
 }

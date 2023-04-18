@@ -18,7 +18,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @RequestMapping("/list")
+    @RequestMapping("/admin")
     public String admin(Model model, SearchCategoryBo searchCategoryBo){
         PageInfo<Category> catePageInfo = categoryService.getCategoriesByBo(searchCategoryBo);
         model.addAttribute("categories",catePageInfo.getList());
@@ -27,7 +27,7 @@ public class CategoryController {
         model.addAttribute("pageCount", catePageInfo.getPages());
         model.addAttribute("page",searchCategoryBo.getPage());
         model.addAttribute("pageSize",searchCategoryBo.getPageSize());
-        return null;
+        return "/category/list";
     }
 
 }

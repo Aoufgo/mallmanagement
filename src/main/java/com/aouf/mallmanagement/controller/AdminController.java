@@ -31,7 +31,7 @@ public class AdminController {
     }
 
     //视图方法,响应/admin/admin的请求
-    @RequestMapping("/list")
+    @RequestMapping("/admin")
     public String admin(Model model, SearchAdminBo searchAdminBo){
         model.addAttribute("roles",roleService.getAll());
         List<Admin> adminsByBo = adminService.getAdminsByBo(searchAdminBo);
@@ -41,7 +41,7 @@ public class AdminController {
         model.addAttribute("page", searchAdminBo.getPage());
         model.addAttribute("pageSize", searchAdminBo.getPageSize());
 
-        return null;
+        return "/admin/list";
     }
 
     @RequestMapping("/delete")

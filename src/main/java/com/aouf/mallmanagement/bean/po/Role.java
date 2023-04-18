@@ -1,9 +1,11 @@
 package com.aouf.mallmanagement.bean.po;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import java.util.List;
 
 //实体类-负责角色
-public class Role {
+public class Role implements GrantedAuthority {
     //成员属性
     private Integer role_id;        //角色编号
     private String role_name;       //角色名称
@@ -41,6 +43,11 @@ public class Role {
 
     public void setRole_name(String role_name) {
         this.role_name = role_name;
+    }
+
+    @Override
+    public String getAuthority() {
+        return getRole_name();
     }
 
 

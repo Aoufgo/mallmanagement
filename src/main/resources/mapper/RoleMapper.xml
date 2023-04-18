@@ -59,4 +59,16 @@
             #{id}
         </foreach>
     </delete>
+    <select id="getListByOperateUrl" resultType="Role">
+        select
+            d.*
+        from
+            `operate` a
+                inner join `permission_operate` b on a.`operate_id` = b.`operate_id`
+                inner join `role_permission` c on b.`permission_id` = c.`permission_id`
+                inner join `role` d on c.`role_id` = d.`role_id`
+        where
+            a.`operate_url` = #{operate_url}
+    </select>
+
 </mapper>

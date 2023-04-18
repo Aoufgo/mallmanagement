@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title> 学掌门商城 - 后台管理系统 </title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/animate.min.css}" />
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}" ></script>
+    <script type="text/javascript" th:src="@{/js/wow.js}" ></script>
+    <link rel="stylesheet" th:href="@{/css/global.css}" />
+    <script type="text/javascript" th:src="@{/js/global.js}" ></script>
+    <style>
+			html {
+            background: url(/img/bg5.jpg) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+
+		</style>
+</head>
+<body>
+
+<img th:src="@{/img/bwf_logo.png}" height="50px" style="position:fixed;right:50px; top:20px;"/>
+
+
+<!--
+    作者：titushan2010@163.com
+    时间：2017-09-20
+    描述：登录面板
+-->
+<div align="center" style="width:100%; position:fixed; top:160px; ">
+    <div align="center" style="width:400px; padding:0px; margin:0px; ">
+        <form th:action="@{/index/loginDo}" method="POST">
+            <div class="panel panel-default" style="padding:0px; margin:0px;">
+                <div class="panel-heading">
+                    欢迎登录管理系统1
+                </div>
+                <div class="panel-body">
+
+                    <input type="text" name="admin_name" class="form-control" placeholder="账户名称"/>
+                    <div style="height:10px;"></div>
+                    <input type="password" name="admin_pass" class="form-control" placeholder="账户密码" />
+
+                </div>
+                <div class="panel-footer">
+                    <button type="submit" class="btn btn-primary btn-sm form-control"> 登  录 </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+</body>
+</html>
