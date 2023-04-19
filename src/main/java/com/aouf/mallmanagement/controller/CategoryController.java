@@ -51,7 +51,7 @@ public class CategoryController {
     public String add(Model model){
         model.addAttribute("parents",categoryService.getAllParentCategories());
         model.addAttribute("brands",brandService.getAllBrand());
-        model.addAttribute("keys",spuAttrKeyService.getAllKey());
+        model.addAttribute("keys",spuAttrKeyService.getFilterAll());
         return "/category/add";
     }
     @RequestMapping("/update")
@@ -59,7 +59,7 @@ public class CategoryController {
         model.addAttribute("category",categoryService.getOne(cate_id));
         model.addAttribute("parents",categoryService.getAllParentCategories());
         model.addAttribute("brands",brandService.getAllBrand());
-        model.addAttribute("keys",spuAttrKeyService.getAllKey());
+        model.addAttribute("keys",spuAttrKeyService.getFilterAll());
         return "/category/edit";
     }
     @RequestMapping("/save")

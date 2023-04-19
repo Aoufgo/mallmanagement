@@ -8,4 +8,109 @@
     <select id="getAllKey" resultType="spuAttrKey">
         select * from spu_attr_key
     </select>
+    <select id="getFilterAll" resultType="SpuAttrKey">
+        select *
+        from spu_attr_key sak
+        where key_issku =0
+
+    </select>
+
+    <insert id="multiAddCateAttr">
+        INSERT INTO spu_attr_key_categories
+        (spu_attr_key_id, category_id)
+        VALUES
+        <foreach collection="addCategoryBo.spuAttrKeyList" item="attrKey" separator=",">
+            (#{attrKey.key_id},#{addCategoryBo.cate_id})
+        </foreach>
+
+    </insert>
+
+
+    <select id="getListByCate" resultType="SpuAttrKey">
+        select spu_attr_key_id as key_id,category_id,id from spu_attr_key_categories
+        where category_id = #{cate_id}
+    </select>
+
+
+    <delete id="delCateAttrKey">
+        delete from spu_attr_key_categories
+        where category_id = #{cate_id}
+    </delete>
+
+    <delete id="multiDelAttrKey">
+        delete from spu_attr_key_categories
+        where category_id in
+        <foreach collection="id_list" separator="," item="id" open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getCount" resultType="java.lang.Integer">
+        select count(*)
+        from spu_attr_key sak
+        <where>
+            <if test="spuAttrKeySearchBo.key_id != null and spuAttrKeySearchBo.key_id.length>0 ">
+                key_id =#{spuAttrKeySearchBo.key_id}
+            </if>
+            <if test="spuAttrKeySearchBo.key_name != null and spuAttrKeySearchBo.key_name.length>0 ">
+                and key_name like '%${spuAttrKeySearchBo.key_name}%'
+            </if>
+            <if test="spuAttrKeySearchBo.key_issku != null and spuAttrKeySearchBo.key_issku != -1">
+                and key_issku =#{spuAttrKeySearchBo.key_issku}
+            </if>
+            <if test="spuAttrKeySearchBo.key_ishigh != null and spuAttrKeySearchBo.key_ishigh != -1">
+                and key_ishigh =#{spuAttrKeySearchBo.key_ishigh}
+            </if>
+        </where>
+    </select>
+
+    <select id="getList" resultType="SpuAttrKey">
+        select *
+        from spu_attr_key sak
+        <where>
+            <if test="spuAttrKeySearchBo.key_id != null and spuAttrKeySearchBo.key_id.length>0 ">
+                key_id =#{spuAttrKeySearchBo.key_id}
+            </if>
+            <if test="spuAttrKeySearchBo.key_name != null and spuAttrKeySearchBo.key_name.length>0 ">
+                and key_name like '%${spuAttrKeySearchBo.key_name}%'
+            </if>
+            <if test="spuAttrKeySearchBo.key_issku != null and spuAttrKeySearchBo.key_issku != -1">
+                and key_issku =#{spuAttrKeySearchBo.key_issku}
+            </if>
+            <if test="spuAttrKeySearchBo.key_ishigh != null and spuAttrKeySearchBo.key_ishigh != -1">
+                and key_ishigh =#{spuAttrKeySearchBo.key_ishigh}
+            </if>
+        </where>
+        <!-- limit #{pageBo.startIndex},#{pageBo.pageSize} -->
+    </select>
+
+    <select id="getFiltersBySpuId" resultType="AttributeVo">
+        select savs.*,v.value_name ,v.value_attr_key_id ,k.key_id,k.key_name,key_issku,v.id as value_id
+        from (
+                 select savs.*
+                 from spu_attr_value_spus savs
+                 where savs.spu_id =#{spu_id}
+             )savs inner join spu_attr_value v on savs.spu_attr_value_id=v.id
+                   inner  join spu_attr_key k on v.value_attr_key_id=k.key_id
+        where key_issku=0
+    </select>
+
+
+    <select id="getSkusBySpuId" resultType="AttributeVo">
+        select savs.*,v.value_name ,v.value_attr_key_id ,k.key_id,k.key_name,key_issku,v.id as value_id
+        from (
+                 select savs.*
+                 from spu_attr_value_spus savs
+                 where savs.spu_id =#{spu_id}
+             )savs inner join spu_attr_value v on savs.spu_attr_value_id=v.id
+                   inner  join spu_attr_key k on v.value_attr_key_id=k.key_id
+        where key_issku=1
+    </select>
+
+    <select id="getSkuAll" resultType="SpuAttrKey">
+        select *
+        from spu_attr_key sak
+        where key_issku =1
+
+    </select>
 </mapper>

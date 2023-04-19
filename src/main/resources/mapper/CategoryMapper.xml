@@ -78,4 +78,33 @@
     <delete id="deleteKeyCateByCateId">
         delete from spu_attr_key_categories where category_id = #{category_id}
     </delete>
+    <select id="getAll" resultType="Category">
+        select cate_id,cate_name
+        from category
+    </select>
+    <select id="getListBySpuId" resultType="Category">
+        select *
+        from cate_spu cs
+        where spu_id=#{spu_id}
+    </select>
+    <select id="getOneWithBrandAndAttr" resultMap="CategoryWithBrandAndAttr">
+        select cate_id ,cate_name ,cate_sort ,createtime ,updatetime ,cate_parentid
+        from category c
+        where cate_id =#{cate_id}
+    </select>
+    <resultMap id="CategoryWithBrandAndAttr" type="Category">
+        <id column="cate_id" property="cate_id"></id>
+        <result column="cate_name" property="cate_name"></result>
+        <result column="cate_sort" property="cate_sort"></result>
+        <result column="createtime" property="createtime"></result>
+        <result column="updatetime" property="updatetime"></result>
+        <result column="cate_parentid" property="cate_parentid"></result>
+
+        <!-- 两个orm规则，用collection实现-->
+        <collection select="com.aouf.mallmanagement.mapper.BrandMapper.getListByCate" column="cate_id"
+                    property="brands" ofType="Brand"></collection>
+
+        <collection select="com.aouf.mallmanagement.mapper.SpuAttrKeyMapper.getListByCate" column="cate_id"
+                    property="spuAttrKeys" ofType="SpuAttrKey"></collection>
+    </resultMap>
 </mapper>

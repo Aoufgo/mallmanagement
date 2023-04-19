@@ -2,6 +2,7 @@ package com.aouf.mallmanagement.service.impl;
 
 import com.aouf.mallmanagement.bean.bo.SearchSpuBo;
 import com.aouf.mallmanagement.bean.po.Spu;
+import com.aouf.mallmanagement.bean.vo.SpuVo;
 import com.aouf.mallmanagement.mapper.SpuMapper;
 import com.aouf.mallmanagement.service.ISpuService;
 import com.github.pagehelper.PageHelper;
@@ -21,5 +22,9 @@ public class SpuService implements ISpuService {
     public PageInfo<Spu> getSpusByBo(SearchSpuBo searchSpuBo) {
         PageHelper.startPage(searchSpuBo.getPage(),searchSpuBo.getPageSize());
         return new PageInfo<>(spuMapper.getSpusByBo(searchSpuBo));
+    }
+    @Override
+    public SpuVo getVoBySpuId(Long spu_id) {
+        return spuMapper.getVo(spu_id);
     }
 }

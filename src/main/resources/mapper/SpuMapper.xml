@@ -45,5 +45,36 @@
             </if>
         </where>
     </select>
+    <select id="getVo" resultMap="SpuVo">
+        select *
+        from spu s
+        where spu_id =#{spu_id}
+    </select>
+    <resultMap id="SpuWithBrand" type="Spu" >
+        <id property="spu_id" column="spu_id"></id>
+        <result property="spu_name" column="spu_name"></result>
+        <result property="spu_title" column="spu_title"></result>
+        <result property="spu_introduction" column="spu_introduction"></result>
+        <result property="spu_unit" column="spu_unit"></result>
 
+        <result property="spu_status" column="spu_status"></result>
+        <result property="createtime" column="createtime"></result>
+        <result property="updatetime" column="updatetime"></result>
+        <result property="spu_brand_id" column="spu_brand_id"></result>
+        <association property="brand" javaType="Brand"
+                     column="spu_brand_id" select="com.aouf.mallmanagement.mapper.BrandMapper.getOne"/>
+    </resultMap>
+    <resultMap id="SpuVo" type="SpuVo" extends="SpuWithBrand">
+        <!-- 额外带出，商品-分类列表的数据-->
+        <collection select="com.aouf.mallmanagement.mapper.CategoryMapper.getListBySpuId" column="spu_id"
+                    property="categoryList" ofType="Category"></collection>
+
+        <!-- 额外带出，商品-筛选属性列表的数据-->
+        <collection select="com.aouf.mallmanagement.mapper.SpuAttrKeyMapper.getFiltersBySpuId" column="spu_id"
+                    property="filterList" ofType="AttributeVo"></collection>
+
+        <!-- 额外带出，商品-规格属性列表的数据-->
+        <collection select="com.aouf.mallmanagement.mapper.SpuAttrKeyMapper.getSkusBySpuId" column="spu_id"
+                    property="skuList" ofType="AttributeVo"></collection>
+    </resultMap>
 </mapper>

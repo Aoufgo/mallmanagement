@@ -21,6 +21,17 @@ public interface CategoryMapper {
     );
     Page<Category> getCategoriesByBo(SearchCategoryBo searchCategoryBo);
     List<Category> getAllParentCategories();
+    //得到一个带品牌列表&筛选属性键列表的分类实体
+    Category getOneWithBrandAndAttr(
+            @Param("cate_id")
+            int cate_id
+    );
+
+    //通过商品编号，得到这个商品关联的分类列表信息
+    List<Category> getListBySpuId(
+            @Param("spu_id")
+            Long spu_id
+    );
     Integer add(AddCategoryBo addCategoryBo);
     Integer update(AddCategoryBo addCategoryBo);
     Integer delete(int[] ids);
@@ -28,5 +39,6 @@ public interface CategoryMapper {
     Integer deleteBrandCateByCateId(Integer category_id);
     Integer addKeyCate(String spu_attr_key_id,Integer category_id);
     Integer deleteKeyCateByCateId(Integer category_id);
+    List<Category> getAll();
 
 }

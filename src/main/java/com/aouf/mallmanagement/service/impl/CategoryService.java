@@ -116,4 +116,9 @@ public class CategoryService implements ICategoryService {
             return "删除失败";
         }
     }
+
+    @Override
+    public List<Category> getAll() {
+        return categoryMapper.getAll();
+    }
 }
