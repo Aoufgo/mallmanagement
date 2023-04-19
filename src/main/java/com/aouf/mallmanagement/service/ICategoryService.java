@@ -16,4 +16,5 @@ public interface ICategoryService {
     String add(AddCategoryBo addCategoryBo);
 
     String update(AddCategoryBo addCategoryBo);
+    String delete(int[] ids);
 }

@@ -68,6 +68,7 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public String update(AddCategoryBo addCategoryBo) {
         try {
             if (categoryMapper.update(addCategoryBo) > 0) {
@@ -92,6 +93,27 @@ public class CategoryService implements ICategoryService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             e.printStackTrace();
             return "更新失败";
+        }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public String delete(int[] ids) {
+        try{
+            if(categoryMapper.delete(ids)>0){
+                for(int id :ids) {
+                    categoryMapper.deleteKeyCateByCateId(id);
+                    categoryMapper.deleteBrandCateByCateId(id);
+                }
+                return "删除成功";
+            }else {
+                return "数据已经被删除";
+            }
+        }catch (Exception e){
+            // 可以在出现异常回滚时设置返回值
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+            return "删除失败";
         }
     }
 }

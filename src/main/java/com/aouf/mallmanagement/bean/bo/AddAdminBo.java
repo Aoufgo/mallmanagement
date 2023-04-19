@@ -2,6 +2,7 @@ package com.aouf.mallmanagement.bean.bo;
 
 import com.aouf.mallmanagement.bean.po.Role;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddAdminBo {
@@ -9,7 +10,7 @@ public class AddAdminBo {
     private String admin_name;
     private String admin_pass;
     private String admin_nickname;
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     @Override
     public String toString() {

@@ -9,7 +9,7 @@ import java.util.List;
 public class AddRoleBo {
     private Integer role_id;
     private String role_name;
-    private Integer[] id_list;
+    private Integer[] id_list = new Integer[10];
 
 
     public Integer getRole_id() {

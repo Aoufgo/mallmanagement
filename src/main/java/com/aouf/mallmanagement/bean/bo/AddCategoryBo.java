@@ -3,6 +3,7 @@ package com.aouf.mallmanagement.bean.bo;
 import com.aouf.mallmanagement.bean.po.Brand;
 import com.aouf.mallmanagement.bean.po.SpuAttrKey;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddCategoryBo {
@@ -10,8 +11,8 @@ public class AddCategoryBo {
     private String cate_name;       //分类名称
     private Integer cate_sort;      //排序字段
     private Integer cate_parentid;  //父级分类id
-    private List<Brand> brands;
-    private List<SpuAttrKey> keys;
+    private List<Brand> brands = new ArrayList<>();
+    private List<SpuAttrKey> keys = new ArrayList<>();
 
     public Integer getCate_id() {
         return cate_id;

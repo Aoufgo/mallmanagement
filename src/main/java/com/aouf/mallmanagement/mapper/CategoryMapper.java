@@ -23,6 +23,7 @@ public interface CategoryMapper {
     List<Category> getAllParentCategories();
     Integer add(AddCategoryBo addCategoryBo);
     Integer update(AddCategoryBo addCategoryBo);
+    Integer delete(int[] ids);
     Integer addBrandCate(String brand_id,Integer category_id);
     Integer deleteBrandCateByCateId(Integer category_id);
     Integer addKeyCate(String spu_attr_key_id,Integer category_id);

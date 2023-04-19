@@ -60,6 +60,12 @@
         update category set cate_name = #{cate_name},cate_sort = #{cate_sort},cate_parentid=#{cate_parentid}
         where cate_id = #{cate_id}
     </insert>
+    <delete id="delete">
+        delete from category where
+        <foreach collection="ids" open="cate_id in (" separator="," close=")"  item="id">
+            #{id}
+        </foreach>
+    </delete>
     <insert id="addBrandCate">
         insert into brand_categories (brand_id,category_id) values (#{brand_id},#{category_id})
     </insert>
