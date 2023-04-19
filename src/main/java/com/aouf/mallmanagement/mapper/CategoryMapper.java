@@ -22,6 +22,7 @@ public interface CategoryMapper {
     Page<Category> getCategoriesByBo(SearchCategoryBo searchCategoryBo);
     List<Category> getAllParentCategories();
     Integer add(AddCategoryBo addCategoryBo);
+    Integer update(AddCategoryBo addCategoryBo);
     Integer addBrandCate(String brand_id,Integer category_id);
     Integer deleteBrandCateByCateId(Integer category_id);
     Integer addKeyCate(String spu_attr_key_id,Integer category_id);

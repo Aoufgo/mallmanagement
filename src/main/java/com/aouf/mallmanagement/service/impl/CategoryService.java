@@ -69,7 +69,29 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public String update(AddCategoryBo addCategoryBo) {
-        //TODO 分类更新方法
-        return null;
+        try {
+            if (categoryMapper.update(addCategoryBo) > 0) {
+                categoryMapper.deleteBrandCateByCateId(addCategoryBo.getCate_id());
+                // 添加品牌信息
+                List<Brand> brands = addCategoryBo.getBrands();
+                for (Brand brand : brands) {
+                    categoryMapper.addBrandCate(brand.getBrand_id(),addCategoryBo.getCate_id());
+                }
+                // 删除属性信息
+                categoryMapper.deleteKeyCateByCateId(addCategoryBo.getCate_id());
+                List<SpuAttrKey> keys = addCategoryBo.getKeys();
+                for (SpuAttrKey key : keys) {
+                    categoryMapper.addKeyCate(key.getKey_id(),addCategoryBo.getCate_id());
+                }
+                return "更新成功";
+            }else {
+                return  "更新失败";
+            }
+        }catch (Exception e){
+            // 可以在出现异常回滚时设置返回值
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            e.printStackTrace();
+            return "更新失败";
+        }
     }
 }

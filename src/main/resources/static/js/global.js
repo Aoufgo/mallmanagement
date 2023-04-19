@@ -233,13 +233,13 @@
 			$("#panel-left-top").animate( {"left":"-200px"} , 400 );
 			$(this).removeClass("switch-on");
 			$(this).addClass("switch-off");
-			$(this).attr("src","img/right.png");
+			$(this).attr("src","/img/right.png");
 		}else{
 			$("#panel-left").animate( {"width":"200px"} , 400 );
 			$("#panel-left-top").animate( {"left":"0px"} , 400 );
 			$(this).removeClass("switch-off");
 			$(this).addClass("switch-on");
-			$(this).attr("src","img/rrow.png");
+			$(this).attr("src","/img/rrow.png");
 		}
 	});
 	
@@ -249,14 +249,14 @@
 			$("#panel-left-top").animate( {"left":"-200px"} , 400 );
 			$(this).removeClass("switch-on");
 			$(this).addClass("switch-off");
-			$(this).attr("src","img/right.png");
+			$(this).attr("src","/img/right.png");
 		}else{
 			$("#panel-left-top").removeClass("hidden-xs");
 			$("#panel-left-top").css( { "left" : "-200px" } );
 			$("#panel-left-top").animate( {"left":"0px"} , 400 );
 			$(this).removeClass("switch-off");
 			$(this).addClass("switch-on");
-			$(this).attr("src","img/rrow.png");
+			$(this).attr("src","/img/rrow.png");
 		}
 	});
 	
