@@ -49,17 +49,17 @@
         select count(*)
         from spu_attr_key sak
         <where>
-            <if test="spuAttrKeySearchBo.key_id != null and spuAttrKeySearchBo.key_id.length>0 ">
-                key_id =#{spuAttrKeySearchBo.key_id}
+            <if test="searchSpuAttrKeyBo.key_id != null and searchSpuAttrKeyBo.key_id.length>0 ">
+                key_id =#{searchSpuAttrKeyBo.key_id}
             </if>
-            <if test="spuAttrKeySearchBo.key_name != null and spuAttrKeySearchBo.key_name.length>0 ">
-                and key_name like '%${spuAttrKeySearchBo.key_name}%'
+            <if test="searchSpuAttrKeyBo.key_name != null and searchSpuAttrKeyBo.key_name.length>0 ">
+                and key_name like '%${searchSpuAttrKeyBo.key_name}%'
             </if>
-            <if test="spuAttrKeySearchBo.key_issku != null and spuAttrKeySearchBo.key_issku != -1">
-                and key_issku =#{spuAttrKeySearchBo.key_issku}
+            <if test="searchSpuAttrKeyBo.key_issku != null and searchSpuAttrKeyBo.key_issku != -1">
+                and key_issku =#{searchSpuAttrKeyBo.key_issku}
             </if>
-            <if test="spuAttrKeySearchBo.key_ishigh != null and spuAttrKeySearchBo.key_ishigh != -1">
-                and key_ishigh =#{spuAttrKeySearchBo.key_ishigh}
+            <if test="searchSpuAttrKeyBo.key_ishigh != null and searchSpuAttrKeyBo.key_ishigh != -1">
+                and key_ishigh =#{searchSpuAttrKeyBo.key_ishigh}
             </if>
         </where>
     </select>
@@ -68,17 +68,17 @@
         select *
         from spu_attr_key sak
         <where>
-            <if test="spuAttrKeySearchBo.key_id != null and spuAttrKeySearchBo.key_id.length>0 ">
-                key_id =#{spuAttrKeySearchBo.key_id}
+            <if test="searchSpuAttrKeyBo.key_id != null and searchSpuAttrKeyBo.key_id.length>0 ">
+                key_id =#{searchSpuAttrKeyBo.key_id}
             </if>
-            <if test="spuAttrKeySearchBo.key_name != null and spuAttrKeySearchBo.key_name.length>0 ">
-                and key_name like '%${spuAttrKeySearchBo.key_name}%'
+            <if test="searchSpuAttrKeyBo.key_name != null and searchSpuAttrKeyBo.key_name.length>0 ">
+                and key_name like '%${searchSpuAttrKeyBo.key_name}%'
             </if>
-            <if test="spuAttrKeySearchBo.key_issku != null and spuAttrKeySearchBo.key_issku != -1">
-                and key_issku =#{spuAttrKeySearchBo.key_issku}
+            <if test="searchSpuAttrKeyBo.key_issku != null and searchSpuAttrKeyBo.key_issku != -1">
+                and key_issku =#{searchSpuAttrKeyBo.key_issku}
             </if>
-            <if test="spuAttrKeySearchBo.key_ishigh != null and spuAttrKeySearchBo.key_ishigh != -1">
-                and key_ishigh =#{spuAttrKeySearchBo.key_ishigh}
+            <if test="searchSpuAttrKeyBo.key_ishigh != null and searchSpuAttrKeyBo.key_ishigh != -1">
+                and key_ishigh =#{searchSpuAttrKeyBo.key_ishigh}
             </if>
         </where>
         <!-- limit #{pageBo.startIndex},#{pageBo.pageSize} -->

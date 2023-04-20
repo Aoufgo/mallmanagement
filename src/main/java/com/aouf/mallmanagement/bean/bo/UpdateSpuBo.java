@@ -5,6 +5,7 @@ package com.aouf.mallmanagement.bean.bo;
 import com.aouf.mallmanagement.bean.po.Category;
 import com.aouf.mallmanagement.bean.po.SpuAttrValueRelation;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,9 +31,9 @@ public class UpdateSpuBo {
         this.spu_introduction = spu_introduction;
     }
 
-    private List<Category> categoryList;//分类列表
-    private List<SpuAttrValueRelation> filterAttrValueList;//商品-筛选属性值关系列表
-    private List<SpuAttrValueRelation> skuAttrValueList;//商品-规格属性值关系列表
+    private List<Category> categoryList = new ArrayList<>();//分类列表
+    private List<SpuAttrValueRelation> filterAttrValueList = new ArrayList<>();//商品-筛选属性值关系列表
+    private List<SpuAttrValueRelation> skuAttrValueList = new ArrayList<>();//商品-规格属性值关系列表
 
     public Long getSpu_id() {
         return spu_id;

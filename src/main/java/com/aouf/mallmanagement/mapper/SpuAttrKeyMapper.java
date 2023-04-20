@@ -1,7 +1,7 @@
 package com.aouf.mallmanagement.mapper;
 
 import com.aouf.mallmanagement.bean.bo.AddCategoryBo;
-import com.aouf.mallmanagement.bean.bo.SpuAttrKeySearchBo;
+import com.aouf.mallmanagement.bean.bo.SearchSpuAttrKeyBo;
 import com.aouf.mallmanagement.bean.po.SpuAttrKey;
 import com.aouf.mallmanagement.bean.vo.AttributeVo;
 import org.apache.ibatis.annotations.Mapper;
@@ -37,10 +37,10 @@ public interface SpuAttrKeyMapper {
 
     //按照查询条件，找属性键列表的数据
     List<SpuAttrKey> getList(
-            @Param("spuAttrKeySearchBo") SpuAttrKeySearchBo spuAttrKeySearchBo);
+            @Param("searchSpuAttrKeyBo") SearchSpuAttrKeyBo searchSpuAttrKeyBo);
 
     //按照查询条件，得到符合条件的记录数，用于分页
-    Integer getCount(@Param("spuAttrKeySearchBo") SpuAttrKeySearchBo spuAttrKeySearchBo);
+    Integer getCount(@Param("searchSpuAttrKeyBo") SearchSpuAttrKeyBo searchSpuAttrKeyBo);
 
     //根据商品id，查询这个商品的关联，筛选属性信息
     List<AttributeVo> getFiltersBySpuId(

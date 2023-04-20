@@ -1,7 +1,7 @@
 package com.aouf.mallmanagement.bean.bo;
 
 //属性键的查询条件bo类
-public class SpuAttrKeySearchBo {
+public class SearchSpuAttrKeyBo {
     //成员属性
     private String key_id;  //属性键id
     private String key_name;    //属性键名称

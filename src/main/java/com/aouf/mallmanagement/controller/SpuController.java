@@ -87,13 +87,8 @@ public class SpuController {
     //执行修改商品
     @RequestMapping("/alter")
     @ResponseBody
-    public String alter(
-            UpdateSpuBo updateSpuBo){
-        boolean result = false;        //初始变量是false
-
-        //todo调用业务层的updateOne方法
-
-      return "done";
+    public String alter(UpdateSpuBo updateSpuBo){
+        return spuService.update(updateSpuBo);
     }
 
 }

@@ -23,6 +23,18 @@
             <result property="cate_name" column="cate_name"/>
         </collection>
     </resultMap>
+    <insert id="addCateSpu">
+        insert into cate_spu (cate_id,spu_id) values (#{cate_id},#{spu_id})
+    </insert>
+    <insert id="addAttrValueSpu">
+        insert into spu_attr_value_spus (spu_attr_value_id,spu_id,spu_attr_imgs) values (#{spu_attr_value_id},#{spu_id},#{spu_attr_imgs})
+    </insert>
+    <delete id="deleteCateSpuBySpuId">
+        delete from cate_spu where spu_id = #{spu_id}
+    </delete>
+    <delete id="deleteAttrValueSpuBySpuId">
+        delete from spu_attr_value_spus where spu_id = #{spu_id}
+    </delete>
     <select id="getOne" resultType="Spu">
 
     </select>
@@ -77,4 +89,9 @@
         <collection select="com.aouf.mallmanagement.mapper.SpuAttrKeyMapper.getSkusBySpuId" column="spu_id"
                     property="skuList" ofType="AttributeVo"></collection>
     </resultMap>
+    <update id="update">
+        update spu set spu_name = #{spu_name},spu_title = #{spu_title}
+        ,spu_introduction = #{spu_introduction},spu_unit=#{spu_unit},spu_status=#{spu_status},spu_brand_id=#{spu_brand_id}
+        where spu_id = #{spu_id}
+    </update>
 </mapper>

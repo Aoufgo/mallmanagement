@@ -1,6 +1,7 @@
 package com.aouf.mallmanagement.service;
 
 import com.aouf.mallmanagement.bean.bo.SearchSpuBo;
+import com.aouf.mallmanagement.bean.bo.UpdateSpuBo;
 import com.aouf.mallmanagement.bean.po.Spu;
 
 import com.aouf.mallmanagement.bean.vo.SpuVo;
@@ -16,4 +17,6 @@ public interface ISpuService {
 
     //通过商品编号，查询到spuvo的实例
     SpuVo getVoBySpuId(Long spu_id);
+
+    String update(UpdateSpuBo updateSpuBo);
 }

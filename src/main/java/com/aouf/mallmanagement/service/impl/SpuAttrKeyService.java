@@ -1,6 +1,6 @@
 package com.aouf.mallmanagement.service.impl;
 
-import com.aouf.mallmanagement.bean.bo.SpuAttrKeySearchBo;
+import com.aouf.mallmanagement.bean.bo.SearchSpuAttrKeyBo;
 import com.aouf.mallmanagement.bean.po.SpuAttrKey;
 import com.aouf.mallmanagement.mapper.SpuAttrKeyMapper;
 import com.aouf.mallmanagement.service.ISpuAttrKeyService;
@@ -32,7 +32,7 @@ public class SpuAttrKeyService implements ISpuAttrKeyService {
     }
     //todo 使用Pagehelper来实现的分页
     @Override
-    public PageInfo<SpuAttrKey> getList(SpuAttrKeySearchBo spuAttrKeySearchBo){
+    public PageInfo<SpuAttrKey> getList(SearchSpuAttrKeyBo searchSpuAttrKeyBo){
         return null;
     }
 }

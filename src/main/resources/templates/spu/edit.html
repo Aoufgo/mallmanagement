@@ -11,14 +11,14 @@
 </head>
 <body>
 <div class="container-fluid">
-    <form th:action="@{/spu/alter}" method="POST" >
+    <form th:action="@{/spu/alter}" method="POST" enctype="multipart/form-data">
 
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">商品编号：</div>
             </div>
             <input type="text" name="spu_id" class="form-control"  readonly
-                th:value="${spu.spu_id}"/>
+                   th:value="${spu.spu_id}"/>
         </div>
 
         <div class="input-group my-2">
@@ -84,9 +84,9 @@
                 <div class="input-group">
                     <select th:name="'categoryList['+${cate_index.index}+'].cate_id'" class="form-control btn-category-controller">
                         <option  th:each="category:${categoryList}"
-                                th:text="${category.cate_name}"
-                                th:value="${category.cate_id}"
-                                th:selected="${category.cate_id}==${cate.cate_id}">商品分类</option>>
+                                 th:text="${category.cate_name}"
+                                 th:value="${category.cate_id}"
+                                 th:selected="${category.cate_id}==${cate.cate_id}">商品分类</option>>
                     </select>
                     <div class="input-group-append">
                         <button type="button" class="btn btn-danger btn-category-dis"> - </button>
@@ -114,12 +114,13 @@
                         <option  th:each="filter:${filterList}"
                                  th:text="${filter.key_name}"
                                  th:value="${filter.key_id}"
-                                th:selected="${filter.key_id}==${filt.key_id}">商品分类</option>>
+                                 th:selected="${filter.key_id}==${filt.key_id}">商品分类</option>>
                     </select>
                     <select th:name="'filterAttrValueList['+${filt_index.index}+'].spu_attr_value_id'" class="form-control btn-filter-controller attr-value">
                         <!--绑定筛选属性值 -->
                         <option th:text="${filt.value_name}" th:value="${filt.value_id}"></option>
                     </select>
+                    <input type="hidden" th:name="'filterAttrValueList['+${filt_index.index}+'].spu_id'" th:value="${spu.spu_id}">
                     <div class="input-group-append">
                         <button type="button" class="btn btn-danger btn-filter-dis"> - </button>
                     </div>
@@ -152,7 +153,8 @@
                         <!--  绑定规格属性值-->
                         <option th:text="${s.value_name}" th:value="${s.value_id}"></option>
                     </select>
-                    <input type="file" name="skuAttrValueList[0].spu_attr_image_list" class="form-control btn-sku-image-controller" multiple/>
+                    <input type="hidden" th:name="'skuAttrValueList['+${s_index.index}+'].spu_id'" th:value="${spu.spu_id}">
+                    <input type="file" th:name="'skuAttrValueList['+${s_index.index}+'].spu_attr_image_list'" class="form-control btn-sku-image-controller" multiple/>
                     <div class="input-group-append">
                         <button type="button" class="btn btn-danger btn-sku-dis"> - </button>
                     </div>
@@ -176,119 +178,123 @@
 
 
 <script>
-$(document).ready(()=>{
+    $(document).ready(()=>{
 
-    // ---------------- 规格属性 ----------------
-    // 重排规格属性控件的name
-    function reloadSkuName(){
-        $(".btn-sku-controller").each(function(index,dom){
-            $(this).prop( "name" , "skuAttrValueList["+index+"].spu_attr_value_id" )
-        })
-        $(".btn-sku-image-controller").each(function(index,dom){
-            $(this).prop( "name" , "skuAttrValueList["+index+"].spu_attr_image_list" )
-        })
-    }
-
-    // 添加规格属性
-    $(".btn-sku-add").click(function(){
-        // 克隆
-        let clone = $(".sku").last().clone(true)
-        // 追加
-        clone.appendTo( $(".sku-group") )
+        // ---------------- 规格属性 ----------------
         // 重排规格属性控件的name
-        reloadSkuName()
-    })
+        function reloadSkuName(){
+            $(".btn-sku-controller").each(function(index,dom){
+                $(this).prop( "name" , "skuAttrValueList["+index+"].spu_attr_value_id" )
+            })
+            $(".btn-sku-image-controller").each(function(index,dom){
+                $(this).prop( "name" , "skuAttrValueList["+index+"].spu_attr_image_list" )
+            })
+        }
 
-    // 删除分类
-    $(".btn-sku-dis").click(function(){
-        // 判断是否可以删除
-        if( $(".sku").length > 1 ){
-            $(this).parents(".sku").remove()
+        // 添加规格属性
+        $(".btn-sku-add").click(function(){
+            // 克隆
+            let clone = $(".sku").last().clone(true)
+            // 追加
+            clone.appendTo( $(".sku-group") )
             // 重排规格属性控件的name
             reloadSkuName()
-        }
-    })
-
-    // ---------------- 筛选属性 ----------------
-    // 重排筛选属性控件的name
-    function reloadFilterName(){
-        $(".btn-filter-controller").each(function(index,dom){
-            $(this).prop( "name" , "filterAttrValueList["+index+"].spu_attr_value_id" )
         })
-    }
 
-    // 添加筛选属性
-    $(".btn-filter-add").click(function(){
-        // 克隆
-        let clone = $(".filter").last().clone(true)
-        // 追加
-        clone.appendTo( $(".filter-group") )
+        // 删除分类
+        $(".btn-sku-dis").click(function(){
+            // 判断是否可以删除
+            if( $(".sku").length > 1 ){
+                $(this).parents(".sku").remove()
+                // 重排规格属性控件的name
+                reloadSkuName()
+            }
+        })
+
+        // ---------------- 筛选属性 ----------------
         // 重排筛选属性控件的name
-        reloadFilterName()
-    })
+        function reloadFilterName(){
+            $(".btn-filter-controller").each(function(index,dom){
+                $(this).prop( "name" , "filterAttrValueList["+index+"].spu_attr_value_id" )
+            })
+        }
 
-    // 删除分类
-    $(".btn-filter-dis").click(function(){
-        // 判断是否可以删除
-        if( $(".filter").length > 1 ){
-            $(this).parents(".filter").remove()
+        // 添加筛选属性
+        $(".btn-filter-add").click(function(){
+            // 克隆
+            let clone = $(".filter").last().clone(true)
+            // 追加
+            clone.appendTo( $(".filter-group") )
             // 重排筛选属性控件的name
             reloadFilterName()
-        }
-    })
+        })
 
-    // ---------------- 商品属性 ----------------
-    // 改变了选中的属性键
-    $(".attr-key").change(function(){
-        // 将 当前被改变的属性键 存放起来
-        let that = this
-        // 发送 ajax请求 查询 该属性键的属性值列表
-        $.ajax({
-            url : "/attr-value/getListByKeyId",
-            type : "GET",
-            data : { "key_id" : $(this).val() },
-            success : function(response){
-                // 将 响应的字符串 转换成 json 对象
-                response = JSON.parse( response )
-                // 先清空属性值下拉列表中原来的选项
-                $(that).nextAll(".attr-value").html("")
-                // 遍历 每一个属性值
-                for( let spuAttrValue of response ){
-                    let op = new Option( spuAttrValue.value_name , spuAttrValue.id )
-                    $(that).nextAll(".attr-value").get(0).options.add( op )
+        // 删除分类
+        $(".btn-filter-dis").click(function(){
+            // 判断是否可以删除
+            if( $(".filter").length > 1 ){
+                $(this).parents(".filter").remove()
+                // 重排筛选属性控件的name
+                reloadFilterName()
+            }
+        })
+
+        // ---------------- 商品属性 ----------------
+        // 改变了选中的属性键
+        $(".attr-key").change(function(){
+            console.log("select-attr-key被调用了")
+            console.log("选中的keyid的内容："+$(this).val())
+
+
+            // 将 当前被改变的属性键 存放起来
+            let that = this
+            // 发送 ajax请求 查询 该属性键的属性值列表
+            $.ajax({
+                url : "/attr-value/getListByKeyId",
+                type : "GET",
+                data : { "key_id" : $(this).val() },
+                success : function(response){
+                    // 将 响应的字符串 转换成 json 对象
+                    response = JSON.parse( response )
+                    // 先清空属性值下拉列表中原来的选项
+                    $(that).nextAll(".attr-value").html("")
+                    // 遍历 每一个属性值
+                    for( let spuAttrValue of response ){
+                        let op = new Option( spuAttrValue.value_name , spuAttrValue.id )
+                        $(that).nextAll(".attr-value").get(0).options.add( op )
+                    }
                 }
+            })
+        })
+
+        // ---------------- 商品分类 ----------------
+        // 重排分类控件的name
+        function reloadCategoryName(){
+            $(".btn-category-controller").each(function(index,dom){
+                $(this).prop( "name" , "categoryList["+index+"].cate_id" )
+            })
+        }
+
+        // 添加分类
+        $(".btn-category-add").click(function(){
+            // 克隆
+            let clone = $(".category").last().clone(true)
+            // 追加
+            clone.appendTo( $(".category-group") )
+            // 重排分类控件的name
+            reloadCategoryName()
+        })
+
+        // 删除分类
+        $(".btn-category-dis").click(function(){
+            // 判断是否可以删除
+            if( $(".category").length > 1 ){
+                $(this).parents(".category").remove()
+                // 重排分类控件的name
+                reloadCategoryName()
             }
         })
     })
-
-    // ---------------- 商品分类 ----------------
-    // 重排分类控件的name
-    function reloadCategoryName(){
-        $(".btn-category-controller").each(function(index,dom){
-            $(this).prop( "name" , "categoryList["+index+"].cate_id" )
-        })
-    }
-
-    // 添加分类
-    $(".btn-category-add").click(function(){
-        // 克隆
-        let clone = $(".category").last().clone(true)
-        // 追加
-        clone.appendTo( $(".category-group") )
-        // 重排分类控件的name
-        reloadCategoryName()
-    })
-
-    // 删除分类
-    $(".btn-category-dis").click(function(){
-        // 判断是否可以删除
-        if( $(".category").length > 1 ){
-            $(this).parents(".category").remove()
-            // 重排分类控件的name
-            reloadCategoryName()
-        }
-    })
-})
 </script>
 
 </body>
