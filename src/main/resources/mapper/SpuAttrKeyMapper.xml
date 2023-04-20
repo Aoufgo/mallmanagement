@@ -81,7 +81,6 @@
                 and key_ishigh =#{searchSpuAttrKeyBo.key_ishigh}
             </if>
         </where>
-        <!-- limit #{pageBo.startIndex},#{pageBo.pageSize} -->
     </select>
 
     <select id="getFiltersBySpuId" resultType="AttributeVo">

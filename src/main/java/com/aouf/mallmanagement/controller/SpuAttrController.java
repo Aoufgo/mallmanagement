@@ -17,22 +17,30 @@ public class SpuAttrController {
 
     //成员属性
     @Autowired
-    ISpuAttrKeyService spuAttrKeyService;
+    private ISpuAttrKeyService spuAttrKeyService;
 
-    //todo 查询页面的视图方法
+    //查询页面的视图方法
     @RequestMapping("/admin")
     public String admin(
-            SearchSpuAttrKeyBo searchSpuAttrKeyBo,       //查询条件
-            //页面中得到分页信息
-            Model model                                  //需要辅助变量，要传递数据给thymeleaf页面
-    ){
+            SearchSpuAttrKeyBo searchSpuAttrKeyBo, Model model){
         //调用业务层的getList的方法
-        PageInfo<SpuAttrKey> spuAttrKeyList = spuAttrKeyService.getList(searchSpuAttrKeyBo);
-
+        PageInfo<SpuAttrKey> spuAttrKeyPageInfo = spuAttrKeyService.getList(searchSpuAttrKeyBo);
         //把数据传给html页面
-        model.addAttribute("spuAttrKeyList",spuAttrKeyList);
+        model.addAttribute("spuAttrKeyList",spuAttrKeyPageInfo.getList());
         model.addAttribute("spuAttrKeySearchBo", searchSpuAttrKeyBo);
-
+        model.addAttribute("pageCount", spuAttrKeyPageInfo.getPages());
+        model.addAttribute("page",searchSpuAttrKeyBo.getPage());
+        model.addAttribute("pageSize",searchSpuAttrKeyBo.getPageSize());
+        return "/attr/list";
+    }
+    @RequestMapping("/add")
+    public String add(){
+        //todo 属性添加
+        return null;
+    }
+    @RequestMapping("/update")
+    public String update(){
+        //todo 属性更新
         return null;
     }
 }

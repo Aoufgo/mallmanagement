@@ -112,7 +112,7 @@ public class SpuService implements ISpuService {
         try {
             // 設置更新時間
             updateSpuBo.setCreatetime(new Date());
-            // 更新spu 
+            // 更新spu
             spuMapper.add(updateSpuBo);
             // 添加商品-分類數據
             for (Category category : updateSpuBo.getCategoryList()) {

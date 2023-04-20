@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加属性</title>
+    <link href="/css/bootstrap-4.6.1.min.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap-4.6.1.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <form action="/attr/save" method="POST">
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">属性键名称：</div>
+            </div>
+            <input type="text" name="key_name" class="form-control" placeholder="请输入属性键名称"/>
+        </div>
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">属性分类：</div>
+            </div>
+            <select name="key_issku" class="form-control">
+                <option value="0">筛选属性</option>
+                <option value="1">规格属性</option>
+            </select>
+        </div>
+        <div class="input-group my-2">
+            <div class="input-group-append">
+                <div class="input-group-text">属性等级：</div>
+            </div>
+            <select name="key_ishigh" class="form-control">
+                <option value="0">普通属性</option>
+                <option value="1">高级属性</option>
+            </select>
+        </div>
+
+        <div class="input-group my-2">
+            <div class="input-group-prepend">
+                <div class="input-group-text">属性值：</div>
+            </div>
+            <div class="input-group-append">
+                <button type="button" class="btn btn-success btn-add"> + </button>
+            </div>
+        </div>
+        <div class="my-2 row clone-group">
+            <div class="col-6 clone my-2">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">属性值名称：</div>
+                    </div>
+                    <input type="text" name="spuAttrValueList[0].value_name" class="form-control clone-control" placeholder="请输入属性值名称" />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-danger btn-dis"> - </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary"> 添加属性 </button>
+
+    </form>
+</div>
+
+<script>
+        $(document).ready(()=>{
+
+            // 重新排列 克隆列表的 name
+            function refresh(){
+                // 循环 每一个 克隆控件
+                $(".clone-control").each( function( index , dom ){
+                    $(this).prop( "name" , "spuAttrValueList["+ index +"].value_name" )
+                } )
+            }
+
+            // 删除克隆选项
+            $(".btn-dis").click(function(){
+                // 判断是否只剩下最后一个克隆选项
+                if( $(".clone").length > 1 ){
+                    // 剩下不止一个克隆选项 可以删除当前克隆选项
+                    $(this).parents(".clone").remove()
+                    // 重新排列角色下拉列表的name
+                    refresh()
+                }
+            })
+            // 添加克隆选项
+            $(".btn-add").click(function(){
+                // 克隆 一份 选项
+                let clone = $(".clone").last().clone(true)
+                // 将 克隆的 选项 追加到 克隆列表
+                clone.appendTo( $(".clone-group") )
+                // 重新排列克隆列表的name
+                refresh()
+            })
+
+
+        })
+    </script>
+
+</body>
+</html>

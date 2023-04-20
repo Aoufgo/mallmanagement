@@ -7,9 +7,26 @@ public class SearchSpuAttrKeyBo {
     private String key_name;    //属性键名称
     private Byte    key_issku;  //是否规格属性，0代表筛选、1代表规格
     private Byte    key_ishigh; //是否高级属性，0代表普通，1代表高级
-
+    private Integer pageSize = 10;
+    private Integer page = 1;
     //访问器
 
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
 
     public String getKey_id() {
         return key_id;

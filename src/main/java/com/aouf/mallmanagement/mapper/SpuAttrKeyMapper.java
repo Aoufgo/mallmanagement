@@ -39,9 +39,6 @@ public interface SpuAttrKeyMapper {
     List<SpuAttrKey> getList(
             @Param("searchSpuAttrKeyBo") SearchSpuAttrKeyBo searchSpuAttrKeyBo);
 
-    //按照查询条件，得到符合条件的记录数，用于分页
-    Integer getCount(@Param("searchSpuAttrKeyBo") SearchSpuAttrKeyBo searchSpuAttrKeyBo);
-
     //根据商品id，查询这个商品的关联，筛选属性信息
     List<AttributeVo> getFiltersBySpuId(
             @Param("spu_id")Long spu_id

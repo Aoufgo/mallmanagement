@@ -4,6 +4,7 @@ import com.aouf.mallmanagement.bean.bo.SearchSpuAttrKeyBo;
 import com.aouf.mallmanagement.bean.po.SpuAttrKey;
 import com.aouf.mallmanagement.mapper.SpuAttrKeyMapper;
 import com.aouf.mallmanagement.service.ISpuAttrKeyService;
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,10 @@ public class SpuAttrKeyService implements ISpuAttrKeyService {
     public List<SpuAttrKey> getSkuAll() {
         return spuAttrKeyMapper.getSkuAll();
     }
-    //todo 使用Pagehelper来实现的分页
+    //使用Pagehelper来实现的分页
     @Override
     public PageInfo<SpuAttrKey> getList(SearchSpuAttrKeyBo searchSpuAttrKeyBo){
-        return null;
+        PageHelper.startPage(searchSpuAttrKeyBo.getPage(),searchSpuAttrKeyBo.getPageSize());
+        return new PageInfo<>(spuAttrKeyMapper.getList(searchSpuAttrKeyBo));
     }
 }
