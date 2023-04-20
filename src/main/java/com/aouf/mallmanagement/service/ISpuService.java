@@ -7,6 +7,7 @@ import com.aouf.mallmanagement.bean.po.Spu;
 import com.aouf.mallmanagement.bean.vo.SpuVo;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface ISpuService {
     SpuVo getVoBySpuId(Long spu_id);
 
     String update(UpdateSpuBo updateSpuBo);
+
+    String save(UpdateSpuBo updateSpuBo);
 }

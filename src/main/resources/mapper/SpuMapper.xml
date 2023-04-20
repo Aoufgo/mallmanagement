@@ -29,6 +29,10 @@
     <insert id="addAttrValueSpu">
         insert into spu_attr_value_spus (spu_attr_value_id,spu_id,spu_attr_imgs) values (#{spu_attr_value_id},#{spu_id},#{spu_attr_imgs})
     </insert>
+    <insert id="add" useGeneratedKeys="true" keyProperty="spu_id">
+        insert into spu (spu_name,spu_title,spu_introduction,spu_unit,spu_status,createtime,spu_brand_id)
+        values (#{spu_name},#{spu_title},#{spu_introduction},#{spu_unit},#{spu_status},#{createtime},#{spu_brand_id})
+    </insert>
     <delete id="deleteCateSpuBySpuId">
         delete from cate_spu where spu_id = #{spu_id}
     </delete>
@@ -91,7 +95,7 @@
     </resultMap>
     <update id="update">
         update spu set spu_name = #{spu_name},spu_title = #{spu_title}
-        ,spu_introduction = #{spu_introduction},spu_unit=#{spu_unit},spu_status=#{spu_status},spu_brand_id=#{spu_brand_id}
+        ,spu_introduction = #{spu_introduction},spu_unit=#{spu_unit},spu_status=#{spu_status},updatetime=#{updatetime} spu_brand_id=#{spu_brand_id}
         where spu_id = #{spu_id}
     </update>
 </mapper>

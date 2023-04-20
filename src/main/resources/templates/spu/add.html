@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>添加商品Spu</title>
+
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/popper.min.js}"></script>
     <link th:href="@{/css/bootstrap-4.6.1.min.css}" rel="stylesheet"/>
@@ -10,27 +11,28 @@
 </head>
 <body>
 <div class="container-fluid">
-    <form action="#" method="POST" >
+    <form th:action="@{/spu/save}" method="POST" enctype="multipart/form-data">
 
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">商品名称：</div>
             </div>
-            <input type="text" name="spu_name" class="form-control" placeholder="请输入商品名称"/>
+            <input type="text" name="spu_name" class="form-control" placeholder="请输入商品名称"
+                   />
         </div>
 
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">商品标题：</div>
             </div>
-            <input type="text" name="spu_title" class="form-control" placeholder="请输入商品标题"/>
+            <input type="text" name="spu_title" class="form-control" placeholder="请输入商品标题" />
         </div>
 
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">商品单位：</div>
             </div>
-            <input type="text" name="spu_unit" class="form-control" placeholder="请输入商品单位"/>
+            <input type="text" name="spu_unit" class="form-control" placeholder="请输入商品单位" />
         </div>
 
         <div class="input-group my-2">
@@ -38,8 +40,8 @@
                 <div class="input-group-text">商品状态：</div>
             </div>
             <select name="spu_status" class="form-control">
-                <option value="1">上架</option>
-                <option value="0">下架</option>
+                <option value="1" >上架</option>
+                <option value="0" >下架</option>
             </select>
         </div>
 
@@ -48,10 +50,15 @@
                 <div class="input-group-text">商品品牌：</div>
             </div>
             <select name="spu_brand_id" class="form-control">
-                <option>商品品牌</option>
+                <!--需要绑定所有品牌数据 -->
+                <option th:each="brand:${brandList}"
+                        th:text="${brand.brand_name}"
+                        th:value="${brand.brand_id}">商品品牌</option>
+
             </select>
         </div>
 
+        <!-- 一组+/- 的开始 商品分类相关 -->
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">商品分类：</div>
@@ -62,10 +69,14 @@
         </div>
 
         <div class="row my-2 category-group">
+
+            <!-- 这个div，相当于一组 分类商品关联 的基本元素；遍历就要以这个div元素为基准 -->
             <div class="col-3 category my-2">
                 <div class="input-group">
-                    <select name="categoryList[0].cate_id" class="form-control btn-category-controller">
-                        <option >商品分类</option>
+                    <select th:name="'categoryList[0].cate_id'" class="form-control btn-category-controller">
+                        <option  th:each="category:${categoryList}"
+                                th:text="${category.cate_name}"
+                                th:value="${category.cate_id}">商品分类</option>>
                     </select>
                     <div class="input-group-append">
                         <button type="button" class="btn btn-danger btn-category-dis"> - </button>
@@ -74,6 +85,8 @@
             </div>
         </div>
 
+
+        <!-- 一组+/- 的开始 商品筛选属性相关 -->
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">筛选属性：</div>
@@ -88,8 +101,12 @@
                 <div class="input-group">
                     <select class="form-control attr-key">
                         <option value="">--请选择属性键--</option>
+                        <option  th:each="filter:${filterList}"
+                                 th:text="${filter.key_name}"
+                                 th:value="${filter.key_id}">商品分类</option>>
                     </select>
-                    <select name="filterAttrValueList[0].spu_attr_value_id" class="form-control btn-filter-controller attr-value">
+                    <select th:name="'filterAttrValueList[0].spu_attr_value_id'" class="form-control btn-filter-controller attr-value">
+                        <option text="筛选属性值" value="筛选属性值"></option>
                     </select>
                     <div class="input-group-append">
                         <button type="button" class="btn btn-danger btn-filter-dis"> - </button>
@@ -98,6 +115,8 @@
             </div>
         </div>
 
+
+        <!-- 一组+/- 的开始 商品规格属性相关 -->
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">规格属性：</div>
@@ -108,14 +127,18 @@
         </div>
 
         <div class="row my-2 sku-group">
-            <div class="col-12 sku my-2">
+            <div class="col-12 sku my-2" >
                 <div class="input-group">
                     <select class="form-control attr-key">
                         <option value="">--请选择属性键--</option>
+                        <option  th:each="sku:${skuList}"
+                                 th:text="${sku.key_name}"
+                                 th:value="${sku.key_id}">商品分类</option>>
                     </select>
-                    <select name="skuAttrValueList[0].spu_attr_value_id" class="form-control btn-sku-controller attr-value">
+                    <select th:name="'skuAttrValueList[0].spu_attr_value_id'" class="form-control btn-sku-controller attr-value">
+                        <option text="规格属性值" value="规格属性值"></option>
                     </select>
-                    <input type="file" name="skuAttrValueList[0].spu_attr_image_list" class="form-control btn-sku-image-controller" multiple/>
+                    <input type="file" th:name="'skuAttrValueList[0].spu_attr_image_list'" class="form-control btn-sku-image-controller" multiple/>
                     <div class="input-group-append">
                         <button type="button" class="btn btn-danger btn-sku-dis"> - </button>
                     </div>
@@ -127,7 +150,7 @@
             <div class="input-group-append">
                 <div class="input-group-text">商品详情：</div>
             </div>
-            <textarea name="spu_introduction" class="form-control" placeholder="请输入商品详情" rows="6"></textarea>
+            <textarea name="spu_introduction" class="form-control" placeholder="请输入商品详情" rows="6" ></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary"> 添加商品Spu </button>
@@ -203,6 +226,10 @@ $(document).ready(()=>{
     // ---------------- 商品属性 ----------------
     // 改变了选中的属性键
     $(".attr-key").change(function(){
+        console.log("select-attr-key被调用了")
+        console.log("选中的keyid的内容："+$(this).val())
+
+
         // 将 当前被改变的属性键 存放起来
         let that = this
         // 发送 ajax请求 查询 该属性键的属性值列表

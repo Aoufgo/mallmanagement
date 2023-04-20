@@ -65,30 +65,46 @@ public class SpuController {
         //页面中需要spuvo的类型
         SpuVo spuVo = spuService.getVoBySpuId(spu_id);
         model.addAttribute("spu",spuVo);
-
         //需要所有品牌列表的数据
         List<Brand> brandList = brandService.getAllBrand();
         model.addAttribute("brandList",brandList);
-
         //需要所有分类的数据
         List<Category> categoryList = categoryService.getAll();
         model.addAttribute("categoryList",categoryList);
-
         //需要所有筛选属性键的数据
         List<SpuAttrKey> filterList =spuAttrKeyService.getFilterAll();
         model.addAttribute("filterList",filterList);
-
         //需要所有规格属性键的数据
         List<SpuAttrKey> skuList = spuAttrKeyService.getSkuAll();
         model.addAttribute("skuList",skuList);
-
         return "/spu/edit";
+    }
+    @RequestMapping("/add")
+    public String add(Model model){
+        //需要所有品牌列表的数据
+        List<Brand> brandList = brandService.getAllBrand();
+        model.addAttribute("brandList",brandList);
+        //需要所有分类的数据
+        List<Category> categoryList = categoryService.getAll();
+        model.addAttribute("categoryList",categoryList);
+        //需要所有筛选属性键的数据
+        List<SpuAttrKey> filterList =spuAttrKeyService.getFilterAll();
+        model.addAttribute("filterList",filterList);
+        //需要所有规格属性键的数据
+        List<SpuAttrKey> skuList = spuAttrKeyService.getSkuAll();
+        model.addAttribute("skuList",skuList);
+        return "/spu/add";
     }
     //执行修改商品
     @RequestMapping("/alter")
     @ResponseBody
     public String alter(UpdateSpuBo updateSpuBo){
         return spuService.update(updateSpuBo);
+    }
+    @RequestMapping("/save")
+    @ResponseBody
+    public String save(UpdateSpuBo updateSpuBo){
+        return spuService.save(updateSpuBo);
     }
 
 }

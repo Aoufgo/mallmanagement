@@ -22,4 +22,5 @@ public interface SpuMapper {
     Integer addAttrValueSpu(SpuAttrValueRelation spuAttrValueRelation);
     Integer deleteCateSpuBySpuId(Long spu_id);
     Integer deleteAttrValueSpuBySpuId(Long spu_id);
+    Integer add(UpdateSpuBo updateSpuBo);
 }
