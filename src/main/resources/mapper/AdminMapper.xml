@@ -71,11 +71,11 @@
         left join menu m on pm.menu_id = m.menu_id
 
         <where>
-            <if test="admin_id!=null and admin_id.length>0">
-                admin_id = #{admin_id}
+            <if test="admin_id!=null">
+                a.admin_id = #{admin_id}
             </if>
             <if test="admin_name!=null and admin_name.length>0">
-                or admin_name = #{admin_name}
+                or a.admin_name = #{admin_name}
             </if>
         </where>
     </select>
