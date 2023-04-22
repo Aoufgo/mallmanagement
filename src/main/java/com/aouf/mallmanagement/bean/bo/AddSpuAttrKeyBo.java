@@ -1,24 +1,19 @@
-package com.aouf.mallmanagement.bean.po;
+package com.aouf.mallmanagement.bean.bo;
+
+import com.aouf.mallmanagement.bean.po.SpuAttrValue;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
-public class SpuAttrKey {
+public class AddSpuAttrKeyBo {
     private String key_id;
     private String key_name;
     private Integer key_issku;
     private Integer key_ishigh;
     private Timestamp createtime;   //创建时间（数据库中是timestamp类型）
     private Timestamp updatetime;   //修改时间
-    private List<SpuAttrValue> spuAttrValueList;
-
-    public List<SpuAttrValue> getSpuAttrValueList() {
-        return spuAttrValueList;
-    }
-
-    public void setSpuAttrValueList(List<SpuAttrValue> spuAttrValueList) {
-        this.spuAttrValueList = spuAttrValueList;
-    }
+    private List<SpuAttrValue> spuAttrValueList = new ArrayList<>();
 
     public String getKey_id() {
         return key_id;
@@ -66,5 +61,13 @@ public class SpuAttrKey {
 
     public void setUpdatetime(Timestamp updatetime) {
         this.updatetime = updatetime;
+    }
+
+    public List<SpuAttrValue> getSpuAttrValueList() {
+        return spuAttrValueList;
+    }
+
+    public void setSpuAttrValueList(List<SpuAttrValue> spuAttrValueList) {
+        this.spuAttrValueList = spuAttrValueList;
     }
 }

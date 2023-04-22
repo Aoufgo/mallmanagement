@@ -1,5 +1,6 @@
 package com.aouf.mallmanagement.service;
 
+import com.aouf.mallmanagement.bean.bo.AddSpuAttrKeyBo;
 import com.aouf.mallmanagement.bean.bo.SearchSpuAttrKeyBo;
 import com.aouf.mallmanagement.bean.po.SpuAttrKey;
 import com.github.pagehelper.PageInfo;
@@ -15,4 +16,9 @@ public interface ISpuAttrKeyService {
 
     //按照查询条件，得到属性键的列表数据
     PageInfo<SpuAttrKey> getList(SearchSpuAttrKeyBo searchSpuAttrKeyBo);
+
+    String add(AddSpuAttrKeyBo addSpuAttrKeyBo);
+    String update(AddSpuAttrKeyBo addSpuAttrKeyBo);
+
+    SpuAttrKey getOne(String key_id);
 }

@@ -5,6 +5,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.aouf.mallmanagement.mapper.SpuAttrKeyMapper">
+    <update id="updateSpuAttrKey">
+        update spu_attr_key set key_name = #{key_name},key_issku=#{key_issku},key_ishigh=#{key_ishigh},updatetime=#{updatetime}
+    </update>
     <select id="getAllKey" resultType="spuAttrKey">
         select * from spu_attr_key
     </select>
@@ -23,6 +26,10 @@
             (#{attrKey.key_id},#{addCategoryBo.cate_id})
         </foreach>
 
+    </insert>
+    <insert id="addSpuAttrKey">
+        insert into spu_attr_key (key_id,key_name,key_issku,key_ishigh,createtime)
+        values (#{key_id},#{key_name},#{key_issku},#{key_ishigh},#{createtime})
     </insert>
 
 
@@ -111,5 +118,26 @@
         from spu_attr_key sak
         where key_issku =1
 
+    </select>
+    <resultMap id="spuAttrKeyMap" type="spuAttrKey">
+        <id column="key_id" property="key_id"/>
+        <result column="key_name" property="key_name"/>
+        <result column="key_issku" property="key_issku"/>
+        <result column="key_ishigh" property="key_ishigh"/>
+        <result column="createtime" property="createtime"/>
+        <result column="updatetime" property="updatetime"/>
+        <collection property="spuAttrValueList" ofType="spuAttrValue">
+            <id column="id" property="id"/>
+            <result column="value_name" property="value_name"/>
+            <result column="createtime" property="createtime"/>
+            <result column="updatetime" property="updatetime"/>
+            <result column="value_attr_key_id" property="value_attr_key_id"/>
+        </collection>
+    </resultMap>
+    <select id="getOne" resultMap="spuAttrKeyMap">
+        select * from
+        spu_attr_key sak
+        left join spu_attr_value sav on sak.key_id = sav.value_attr_key_id
+        where sak.key_id = #{key_id}
     </select>
 </mapper>

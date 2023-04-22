@@ -1,6 +1,7 @@
 package com.aouf.mallmanagement.mapper;
 
 import com.aouf.mallmanagement.bean.bo.AddCategoryBo;
+import com.aouf.mallmanagement.bean.bo.AddSpuAttrKeyBo;
 import com.aouf.mallmanagement.bean.bo.SearchSpuAttrKeyBo;
 import com.aouf.mallmanagement.bean.po.SpuAttrKey;
 import com.aouf.mallmanagement.bean.vo.AttributeVo;
@@ -48,5 +49,11 @@ public interface SpuAttrKeyMapper {
     List<AttributeVo> getSkusBySpuId(
             @Param("spu_id")Long spu_id
     );
+
+    Integer addSpuAttrKey(AddSpuAttrKeyBo addSpuAttrKeyBo);
+
+    Integer updateSpuAttrKey(AddSpuAttrKeyBo addSpuAttrKeyBo);
+
+    SpuAttrKey getOne(String key_id);
 
 }

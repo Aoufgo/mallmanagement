@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface SpuAttrValueMapper {
     List<SpuAttrValue> getListByKeyId(String key_id);
+
+    Integer addSpuAttrValue(SpuAttrValue spuAttrValue);
 }

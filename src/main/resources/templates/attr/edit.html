@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>修改属性</title>
-    <link href="/css/bootstrap-4.6.1.min.css" rel="stylesheet"/>
-    <script src="/js/jquery-3.6.0.min.js"></script>
-    <script src="@{/js/popper.min.js"></script>
-    <script src="@{/js/bootstrap-4.6.1.min.js"></script>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <link th:href="@{/css/bootstrap-4.6.1.min.css}" rel="stylesheet"/>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
 </head>
 <body>
 <div class="container-fluid">
-    <form action="#" method="POST">
+    <form action="alter" method="POST">
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">属性键编号：</div>
             </div>
-            <input type="text" name="key_id" class="form-control" readonly
+            <input th:value="${spuAttrKey.key_id}" type="text" name="key_id" class="form-control" readonly
                 />
         </div>
         <div class="input-group my-2">
             <div class="input-group-append">
                 <div class="input-group-text">属性键名称：</div>
             </div>
-            <input type="text" name="key_name" class="form-control" placeholder="请输入属性键名称"
+            <input th:value="${spuAttrKey.key_name}" type="text" name="key_name" class="form-control" placeholder="请输入属性键名称"
                    />
         </div>
         <div class="input-group my-2">
@@ -30,8 +30,8 @@
                 <div class="input-group-text">属性分类：</div>
             </div>
             <select name="key_issku" class="form-control">
-                <option value="0" >筛选属性</option>
-                <option value="1" >规格属性</option>
+                <option value="0" th:selected="${spuAttrKey.key_issku} == 0" >筛选属性</option>
+                <option value="1" th:selected="${spuAttrKey.key_issku} == 1">规格属性</option>
             </select>
         </div>
         <div class="input-group my-2">
@@ -39,8 +39,8 @@
                 <div class="input-group-text">属性等级：</div>
             </div>
             <select name="key_ishigh" class="form-control">
-                <option value="0">普通属性</option>
-                <option value="1" >高级属性</option>
+                <option value="0" th:selected="${spuAttrKey.key_ishigh} == 0">普通属性</option>
+                <option value="1" th:selected="${spuAttrKey.key_ishigh} == 1" >高级属性</option>
             </select>
         </div>
 
@@ -52,17 +52,15 @@
                 <button type="button" class="btn btn-success btn-add"> + </button>
             </div>
         </div>
-        <div class="my-2 row clone-group">
-            <div class="col-6 clone my-2" >
-                <div class="input-group">
+        <div class="my-2 row clone-group" >
+            <div class="col-6 clone my-2" th:each="value:${spuAttrKey.spuAttrValueList}">
+                <div class="input-group" >
                     <div class="input-group-prepend">
                         <div class="input-group-text">属性值名称：</div>
                     </div>
-                    <input type="hidden" class="form-control clone-hidden"
-                           />
-                    <input type="text"  class="form-control clone-control" placeholder="请输入属性值名称"
-                           readonly
-                           />
+                    <input type="hidden" class="form-control clone-hidden"/>
+                    <input type="text" th:value="${value.value_name}"  class="form-control clone-control" placeholder="请输入属性值名称"
+                           readonly/>
                     <div class="input-group-append" style="display:none;">
                         <button type="button" class="btn btn-danger btn-dis"> - </button>
                     </div>
@@ -81,10 +79,10 @@
             // 重新排列 克隆列表的 name
             function refresh(){
                 // 循环 每一个 克隆控件
-                $(".clone-control").each( function( index , dom ){
+                $(".cloneEle").find(".clone-control").each( function( index , dom ){
                     $(this).prop( "name" , "spuAttrValueList["+ index +"].value_name" )
                 } )
-                $(".clone-hidden").each( function( index , dom ){
+                $(".cloneEle").find(".clone-hidden").each( function( index , dom ){
                     $(this).prop( "name" , "spuAttrValueList["+ index +"].id" )
                 } )
             }
@@ -111,6 +109,8 @@
                 clone.find(".clone-control").prop("readonly",false)
                 // 将 克隆的 选项 的 属性值id 去除
                 clone.find(".clone-hidden").val("")
+                // 添加一个新的class用于查找克隆的组件,防止提交之前的属性值
+                clone.addClass("cloneEle")
                 // 重新排列克隆列表的name
                 refresh()
             })

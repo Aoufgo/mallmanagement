@@ -5,6 +5,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.aouf.mallmanagement.mapper.SpuAttrValueMapper">
+    <insert id="addSpuAttrValue">
+        insert into spu_attr_value (value_name,createtime,value_attr_key_id)
+        values (#{value_name},#{createtime},#{value_attr_key_id})
+    </insert>
+    <delete id="deleteSpuAttrValueByKeyId">
+        delete from spu_attr_value where value_attr_key_id = #{key_id}
+    </delete>
     <select id="getListByKeyId" resultType="spuAttrValue">
         select * from spu_attr_value
         where value_attr_key_id = #{key_id}
