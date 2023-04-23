@@ -95,7 +95,7 @@
     </resultMap>
     <update id="update">
         update spu set spu_name = #{spu_name},spu_title = #{spu_title}
-        ,spu_introduction = #{spu_introduction},spu_unit=#{spu_unit},spu_status=#{spu_status},updatetime=#{updatetime} spu_brand_id=#{spu_brand_id}
+        ,spu_introduction = #{spu_introduction},spu_unit=#{spu_unit},spu_status=#{spu_status},updatetime=#{updatetime},spu_brand_id=#{spu_brand_id}
         where spu_id = #{spu_id}
     </update>
 </mapper>

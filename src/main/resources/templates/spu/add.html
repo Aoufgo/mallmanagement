@@ -106,7 +106,7 @@
                                  th:value="${filter.key_id}">商品分类</option>>
                     </select>
                     <select th:name="'filterAttrValueList[0].spu_attr_value_id'" class="form-control btn-filter-controller attr-value">
-                        <option text="筛选属性值" value="筛选属性值"></option>
+                        <option text="筛选属性值" value=""></option>
                     </select>
                     <div class="input-group-append">
                         <button type="button" class="btn btn-danger btn-filter-dis"> - </button>
@@ -136,7 +136,7 @@
                                  th:value="${sku.key_id}">商品分类</option>>
                     </select>
                     <select th:name="'skuAttrValueList[0].spu_attr_value_id'" class="form-control btn-sku-controller attr-value">
-                        <option text="规格属性值" value="规格属性值"></option>
+                        <option text="规格属性值" value=""></option>
                     </select>
                     <input type="file" th:name="'skuAttrValueList[0].spu_attr_image_list'" class="form-control btn-sku-image-controller" multiple/>
                     <div class="input-group-append">

@@ -151,7 +151,6 @@ public class SpuService implements ISpuService {
                 spu.setSpu_introduction( updateSpuBo.getSpu_introduction() );
                 spu.setSpu_status( updateSpuBo.getSpu_status() == 1 );
                 spu.setSpu_brand_id( updateSpuBo.getSpu_brand_id() );
-                spu.setCreatetime( updateSpuBo.getCreatetime() );
                 spu.setUpdatetime( updateSpuBo.getUpdatetime() );
                 spu.setSpu_unit( updateSpuBo.getSpu_unit() );
 
@@ -163,6 +162,7 @@ public class SpuService implements ISpuService {
                     System.out.println("==> 添加数据到 ElasticSearch 搜索引擎成功！");
                 }catch (Exception e){
                     System.out.println("==> 添加数据到 ElasticSearch 搜索引擎失败！");
+                    e.printStackTrace();
                     //todo 封装 发送消息的 载荷 数据
 //                    Map<String,Object> payload = new HashMap<>();
 //                    payload.put("index","spu");
@@ -250,7 +250,6 @@ public class SpuService implements ISpuService {
                 spu.setSpu_status( updateSpuBo.getSpu_status() == 1 );
                 spu.setSpu_brand_id( updateSpuBo.getSpu_brand_id() );
                 spu.setCreatetime( updateSpuBo.getCreatetime() );
-                spu.setUpdatetime( updateSpuBo.getUpdatetime() );
                 spu.setSpu_unit( updateSpuBo.getSpu_unit() );
 
                 // 创建 ES 实体对象
@@ -261,6 +260,7 @@ public class SpuService implements ISpuService {
                     System.out.println("==> 添加数据到 ElasticSearch 搜索引擎成功！");
                 }catch (Exception e){
                     System.out.println("==> 添加数据到 ElasticSearch 搜索引擎失败！");
+                    e.printStackTrace();
                     //todo 封装 发送消息的 载荷 数据
 //                    Map<String,Object> payload = new HashMap<>();
 //                    payload.put("index","spu");
