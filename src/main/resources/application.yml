@@ -13,7 +13,7 @@ mybatis:
   mapper-locations: classpath:mapper/*Mapper.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-  type-aliases-package: com.aouf.mallmanagement.bean.po
+  type-aliases-package: com.aouf.mallmanagement.bean
   pagehelper:
     helperDialect: mysql
     reasonable: true
@@ -28,3 +28,6 @@ management:
   endpoint:
     health:
       show-details: always
+
+
+

@@ -90,7 +90,7 @@
             <tr  th:each="spu:${spus}">
                 <td th:text="${spu.spu_id}" ></td>
                 <td th:text="${spu.spu_name}" ></td>
-                <td th:text="${spu.brand.brand_name}" ></td>
+                <td th:text="${spu.brand}!=null?${spu.brand.brand_name}:品牌名称" ></td>
                 <td th:text="${spu.spu_unit}" ></td>
                 <td th:text="${spu.spu_status}" ></td>
                 <td th:text="${spu.createtime}" ></td>

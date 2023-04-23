@@ -7,10 +7,14 @@ import com.aouf.mallmanagement.bean.po.Category;
 import com.aouf.mallmanagement.bean.po.Spu;
 import com.aouf.mallmanagement.bean.po.SpuAttrValueRelation;
 import com.aouf.mallmanagement.bean.vo.SpuVo;
+import com.aouf.mallmanagement.es.ESUtils;
 import com.aouf.mallmanagement.mapper.SpuMapper;
 import com.aouf.mallmanagement.service.ISpuService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +24,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class SpuService implements ISpuService {
     private SpuMapper spuMapper;
+    private ESUtils esUtils;
+    @Autowired
+    public void setEsUtils(ESUtils esUtils) {
+        this.esUtils = esUtils;
+    }
+
     @Autowired
     public void setSpuMapper(SpuMapper spuMapper) {
         this.spuMapper = spuMapper;
@@ -35,6 +46,8 @@ public class SpuService implements ISpuService {
         PageHelper.startPage(searchSpuBo.getPage(),searchSpuBo.getPageSize());
         return new PageInfo<>(spuMapper.getSpusByBo(searchSpuBo));
     }
+
+
     @Override
     public SpuVo getVoBySpuId(Long spu_id) {
         return spuMapper.getVo(spu_id);
@@ -168,5 +181,36 @@ public class SpuService implements ISpuService {
             return "添加失败";
         }
 
+    }
+
+    @Override
+    public PageInfo<Spu> getListByEs(SearchSpuBo spuSearchBo) {
+        // 封装 query 条件
+        BoolQueryBuilder query = new BoolQueryBuilder();
+        // 判断 查询条件中 是否包含 spu_id
+        if( spuSearchBo.getSpu_id() != null ){
+            query.must(QueryBuilders.termQuery("spu_id",spuSearchBo.getSpu_id() ));
+        }
+        // 判断 查询条件中 是否包含 spu_name
+        if( spuSearchBo.getSpu_name() != null && spuSearchBo.getSpu_name().length() > 0 ){
+            query.must( QueryBuilders.matchQuery("spu_name" , spuSearchBo.getSpu_name() ) );
+        }
+        // 判断 查询条件中 是否包含 spu_status
+        if( spuSearchBo.getSpu_status() != null ){
+            query.must( QueryBuilders.termQuery( "spu_status" , spuSearchBo.getSpu_status() == 1) );
+        }
+        // 判断 查询条件中 是否包含 spu_brand_id
+        if( spuSearchBo.getSpu_brand_id() != null && spuSearchBo.getSpu_brand_id().length() > 0 ){
+            query.must( QueryBuilders.termQuery( "spu_brand_id" , spuSearchBo.getSpu_brand_id() ) );
+        }
+
+        // 分页条件
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder
+                .query( query )
+                .from( spuSearchBo.getPage() )
+                .size( spuSearchBo.getPageSize() );
+        // 开始查询 并且 返回结果
+        return esUtils.searchPage("spu" , searchSourceBuilder , Spu.class );
     }
 }

@@ -7,6 +7,15 @@ public class SearchSpuBo {
     private String spu_brand_id;        // 商品品牌编号
     private Integer pageSize = 10;
     private Integer page = 1;
+    private Integer pageCount;
+
+    public Integer getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(Integer pageCount) {
+        this.pageCount = pageCount;
+    }
 
     public Integer getPageSize() {
         return pageSize;
