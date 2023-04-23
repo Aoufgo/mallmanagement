@@ -4,18 +4,22 @@ import com.alibaba.fastjson.JSON;
 import com.aouf.mallmanagement.bean.bo.SearchSpuBo;
 import com.aouf.mallmanagement.bean.bo.UpdateSpuBo;
 import com.aouf.mallmanagement.bean.po.Category;
+import com.aouf.mallmanagement.bean.po.ESSpu;
 import com.aouf.mallmanagement.bean.po.Spu;
 import com.aouf.mallmanagement.bean.po.SpuAttrValueRelation;
 import com.aouf.mallmanagement.bean.vo.SpuVo;
 import com.aouf.mallmanagement.es.ESUtils;
+import com.aouf.mallmanagement.es.EsEntity;
 import com.aouf.mallmanagement.mapper.SpuMapper;
 import com.aouf.mallmanagement.service.ISpuService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -23,12 +27,12 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class SpuService implements ISpuService {
+    @Value("${es.enableEs}")
+    private Boolean enableEs = false;
     private SpuMapper spuMapper;
     private ESUtils esUtils;
     @Autowired
@@ -43,6 +47,35 @@ public class SpuService implements ISpuService {
 
     @Override
     public PageInfo<Spu> getSpusByBo(SearchSpuBo searchSpuBo) {
+        if(enableEs){
+            // 封装 query 条件
+            BoolQueryBuilder query = new BoolQueryBuilder();
+            // 判断 查询条件中 是否包含 spu_id
+            if( searchSpuBo.getSpu_id() != null ){
+                query.must(QueryBuilders.termQuery("spu_id",searchSpuBo.getSpu_id() ));
+            }
+            // 判断 查询条件中 是否包含 spu_name
+            if( searchSpuBo.getSpu_name() != null && searchSpuBo.getSpu_name().length() > 0 ){
+                query.must( QueryBuilders.matchQuery("spu_name" , searchSpuBo.getSpu_name() ) );
+            }
+            // 判断 查询条件中 是否包含 spu_status
+            if( searchSpuBo.getSpu_status() != null ){
+                query.must( QueryBuilders.termQuery( "spu_status" , searchSpuBo.getSpu_status() == 1) );
+            }
+            // 判断 查询条件中 是否包含 spu_brand_id
+            if( searchSpuBo.getSpu_brand_id() != null && searchSpuBo.getSpu_brand_id().length() > 0 ){
+                query.must( QueryBuilders.termQuery( "spu_brand_id" , searchSpuBo.getSpu_brand_id() ) );
+            }
+
+            // 分页条件
+            SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+            searchSourceBuilder
+                    .query( query )
+                    .from( searchSpuBo.getPage() )
+                    .size( searchSpuBo.getPageSize() );
+            // 开始查询 并且 返回结果
+            return esUtils.searchPage("spu" , searchSourceBuilder , Spu.class );
+        }
         PageHelper.startPage(searchSpuBo.getPage(),searchSpuBo.getPageSize());
         return new PageInfo<>(spuMapper.getSpusByBo(searchSpuBo));
     }
@@ -109,7 +142,41 @@ public class SpuService implements ISpuService {
             for (SpuAttrValueRelation spuAttrValueRelation : updateSpuBo.getSkuAttrValueList()) {
                 spuMapper.addAttrValueSpu(spuAttrValueRelation);
             }
-                return "更新成功";
+            if (enableEs){
+                // 将 SpuAddBo对象 转化成 SpuPo对象
+                ESSpu spu = new ESSpu();
+                spu.setSpu_id(  updateSpuBo.getSpu_id() );
+                spu.setSpu_name( updateSpuBo.getSpu_name() );
+                spu.setSpu_title( updateSpuBo.getSpu_title() );
+                spu.setSpu_introduction( updateSpuBo.getSpu_introduction() );
+                spu.setSpu_status( updateSpuBo.getSpu_status() == 1 );
+                spu.setSpu_brand_id( updateSpuBo.getSpu_brand_id() );
+                spu.setCreatetime( updateSpuBo.getCreatetime() );
+                spu.setUpdatetime( updateSpuBo.getUpdatetime() );
+                spu.setSpu_unit( updateSpuBo.getSpu_unit() );
+
+                // 创建 ES 实体对象
+                EsEntity<ESSpu> esEntity = new EsEntity<>(spu.getSpu_id().toString(),spu);
+                try{
+                    // 添加 ES 实体对象
+                    IndexResponse response = esUtils.insertOrUpdateOne("spu",esEntity);
+                    System.out.println("==> 添加数据到 ElasticSearch 搜索引擎成功！");
+                }catch (Exception e){
+                    System.out.println("==> 添加数据到 ElasticSearch 搜索引擎失败！");
+                    //todo 封装 发送消息的 载荷 数据
+//                    Map<String,Object> payload = new HashMap<>();
+//                    payload.put("index","spu");
+//                    payload.put("entity",esEntity);
+//                    // 将 要添加的数据 发送到 消息队列中间件 使用异步任务实现重新添加
+//                    rabbitTemplate.convertAndSend(
+//                            "mall-es",      // Exchange 交换机的名称
+//                            "mall.es.add.readd",    // RoutingKey 路由映射规则
+//                            JSON.toJSONString( payload )    // 消息内容
+//                    );
+//                    System.out.println("==> 向 消息队列中间件 发送消息！");
+                }
+            }
+            return "更新成功";
         }catch (Exception e){
             // 可以在出现异常回滚时设置返回值
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -173,6 +240,40 @@ public class SpuService implements ISpuService {
                 spuAttrValueRelation.setSpu_id(updateSpuBo.getSpu_id());
                 spuMapper.addAttrValueSpu(spuAttrValueRelation);
             }
+            if (enableEs){
+                // 将 SpuAddBo对象 转化成 SpuPo对象
+                ESSpu spu = new ESSpu();
+                spu.setSpu_id(  updateSpuBo.getSpu_id() );
+                spu.setSpu_name( updateSpuBo.getSpu_name() );
+                spu.setSpu_title( updateSpuBo.getSpu_title() );
+                spu.setSpu_introduction( updateSpuBo.getSpu_introduction() );
+                spu.setSpu_status( updateSpuBo.getSpu_status() == 1 );
+                spu.setSpu_brand_id( updateSpuBo.getSpu_brand_id() );
+                spu.setCreatetime( updateSpuBo.getCreatetime() );
+                spu.setUpdatetime( updateSpuBo.getUpdatetime() );
+                spu.setSpu_unit( updateSpuBo.getSpu_unit() );
+
+                // 创建 ES 实体对象
+                EsEntity<ESSpu> esEntity = new EsEntity<>(spu.getSpu_id().toString(),spu);
+                try{
+                    // 添加 ES 实体对象
+                    IndexResponse response = esUtils.insertOrUpdateOne("spu",esEntity);
+                    System.out.println("==> 添加数据到 ElasticSearch 搜索引擎成功！");
+                }catch (Exception e){
+                    System.out.println("==> 添加数据到 ElasticSearch 搜索引擎失败！");
+                    //todo 封装 发送消息的 载荷 数据
+//                    Map<String,Object> payload = new HashMap<>();
+//                    payload.put("index","spu");
+//                    payload.put("entity",esEntity);
+//                    // 将 要添加的数据 发送到 消息队列中间件 使用异步任务实现重新添加
+//                    rabbitTemplate.convertAndSend(
+//                            "mall-es",      // Exchange 交换机的名称
+//                            "mall.es.add.readd",    // RoutingKey 路由映射规则
+//                            JSON.toJSONString( payload )    // 消息内容
+//                    );
+//                    System.out.println("==> 向 消息队列中间件 发送消息！");
+                }
+            }
             return "添加成功";
         }catch (Exception e){
             // 可以在出现异常回滚时设置返回值
@@ -181,36 +282,5 @@ public class SpuService implements ISpuService {
             return "添加失败";
         }
 
-    }
-
-    @Override
-    public PageInfo<Spu> getListByEs(SearchSpuBo spuSearchBo) {
-        // 封装 query 条件
-        BoolQueryBuilder query = new BoolQueryBuilder();
-        // 判断 查询条件中 是否包含 spu_id
-        if( spuSearchBo.getSpu_id() != null ){
-            query.must(QueryBuilders.termQuery("spu_id",spuSearchBo.getSpu_id() ));
-        }
-        // 判断 查询条件中 是否包含 spu_name
-        if( spuSearchBo.getSpu_name() != null && spuSearchBo.getSpu_name().length() > 0 ){
-            query.must( QueryBuilders.matchQuery("spu_name" , spuSearchBo.getSpu_name() ) );
-        }
-        // 判断 查询条件中 是否包含 spu_status
-        if( spuSearchBo.getSpu_status() != null ){
-            query.must( QueryBuilders.termQuery( "spu_status" , spuSearchBo.getSpu_status() == 1) );
-        }
-        // 判断 查询条件中 是否包含 spu_brand_id
-        if( spuSearchBo.getSpu_brand_id() != null && spuSearchBo.getSpu_brand_id().length() > 0 ){
-            query.must( QueryBuilders.termQuery( "spu_brand_id" , spuSearchBo.getSpu_brand_id() ) );
-        }
-
-        // 分页条件
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        searchSourceBuilder
-                .query( query )
-                .from( spuSearchBo.getPage() )
-                .size( spuSearchBo.getPageSize() );
-        // 开始查询 并且 返回结果
-        return esUtils.searchPage("spu" , searchSourceBuilder , Spu.class );
     }
 }

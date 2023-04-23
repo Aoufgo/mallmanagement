@@ -28,6 +28,7 @@ management:
   endpoint:
     health:
       show-details: always
-
+es:
+  enableEs: true
 
 

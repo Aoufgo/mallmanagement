@@ -44,9 +44,7 @@ public class SpuController {
 
     @RequestMapping("/admin")
     public String admin(Model model, SearchSpuBo searchSpuBo){
-//        PageInfo<Spu> spuPageInfo = spuService.getSpusByBo(searchSpuBo);
-        // 使用es查询
-        PageInfo<Spu> spuPageInfo = spuService.getListByEs(searchSpuBo);
+        PageInfo<Spu> spuPageInfo = spuService.getSpusByBo(searchSpuBo);
         model.addAttribute("brands",brandService.getAllBrand());
         model.addAttribute("spus",spuPageInfo.getList());
 

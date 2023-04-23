@@ -24,5 +24,4 @@ public interface ISpuService {
 
     String save(UpdateSpuBo updateSpuBo);
 
-    PageInfo<Spu> getListByEs(SearchSpuBo searchSpuBo);
 }
